@@ -63,6 +63,7 @@ public class JoystickDrive extends Command {
         if (strafe < Constants.JOYSTICK_DEADBAND && strafe > -1.0 * Constants.JOYSTICK_DEADBAND) {
           strafe = 0.0; 
         }
+        
         mecDrive.setSpeedBasic(speed, turn, strafe);
         break;
       case "tank":

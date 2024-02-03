@@ -123,6 +123,7 @@ public class MecDrive extends SubsystemBase {
     rightFront.set (rightFrontPower);
     rightBack.set (rightBackPower);
   
+    // Add values to the smart dashboard
     SmartDashboard.putNumber("LF Power", leftFrontPower);
     SmartDashboard.putNumber("LB Power", leftBackPower); 
     SmartDashboard.putNumber("RF Power", rightFrontPower);
