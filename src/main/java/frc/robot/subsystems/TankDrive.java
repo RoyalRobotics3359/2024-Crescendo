@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
 public class TankDrive extends SubsystemBase {
   /** Fields */
   private CANSparkMax leftFront;
