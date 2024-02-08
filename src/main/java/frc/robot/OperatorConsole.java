@@ -16,8 +16,8 @@ public class OperatorConsole {
         private JoystickButton aButton, bButton, xButton, yButton, leftBumper, rightBumper;
 
         /** Constants */
-        private double TRIGGER_DEADBAND = 0.06;
-        private double STICK_DEADBAND = 0.06;
+        private double TRIGGER_DEADBAND = 0.20;
+        private double STICK_DEADBAND = 0.20;
     
         /**Constructor */
         public Controller(int id) {
@@ -43,7 +43,7 @@ public class OperatorConsole {
         public double getLeftStickY() {
             double leftY = -1.0 * controller.getLeftY();
             if (leftY <= -1.0 * STICK_DEADBAND || leftY >= STICK_DEADBAND) {
-                return controller.getLeftY();
+                return leftY;
             }
             return 0.0;
         }

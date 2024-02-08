@@ -54,16 +54,16 @@ public class JoystickDrive extends Command {
         double speed = console.getDController().getLeftStickY();
         double turn = console.getDController().getRightStickX();
         double strafe = console.getDController().getLeftStickX();
-        if (speed < Constants.JOYSTICK_DEADBAND && speed > -1.0 * Constants.JOYSTICK_DEADBAND) {
-          speed = 0.0; 
-        }
-        if (turn < Constants.JOYSTICK_DEADBAND && turn > -1.0 * Constants.JOYSTICK_DEADBAND) {
-          turn = 0.0; 
-        }
-        if (strafe < Constants.JOYSTICK_DEADBAND && strafe > -1.0 * Constants.JOYSTICK_DEADBAND) {
-          strafe = 0.0; 
-        }
-        
+        // if (speed < Constants.JOYSTICK_DEADBAND && speed > -1.0 * Constants.JOYSTICK_DEADBAND) {
+        //   speed = 0.0; 
+        // }
+        // if (turn < Constants.JOYSTICK_DEADBAND && turn > -1.0 * Constants.JOYSTICK_DEADBAND) {
+        //   turn = 0.0; 
+        // }
+        // if (strafe < Constants.JOYSTICK_DEADBAND && strafe > -1.0 * Constants.JOYSTICK_DEADBAND) {
+        //   strafe = 0.0; 
+        // }
+
         mecDrive.setSpeedBasic(speed, turn, strafe);
         break;
       case "tank":
