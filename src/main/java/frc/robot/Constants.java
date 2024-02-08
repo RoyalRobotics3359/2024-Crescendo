@@ -34,6 +34,25 @@ public final class Constants {
     public boolean getReversed() { return isReversed; }
   }
 
+  public enum Pneumatics {
+    intakeLeftForward(0),
+    intakeLeftReverse(1),
+    intakeRightForward(2),
+    intakeRightReverse(3);
+
+    Pneumatics(int i) {
+      id = i;
+    }
+
+    private int id;
+
+    public int getId() {
+      return id;  
+    }
+  }
+
+
+
   /** Robot Subsystem Existence */
   public static final boolean MECANUM_DRIVE_EXISTS = true;
   public static final boolean TANK_DRIVE_EXISTS = false;
