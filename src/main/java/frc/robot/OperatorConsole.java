@@ -84,4 +84,12 @@ public class OperatorConsole {
 
     public Controller getDController() { return d_controller; }
 
+    /**
+     * returns the button to use the intake
+     * @return JoystickButton Button mapped to deploy the intake
+     */
+    public JoystickButton getIntakeDeployButton() {
+        return d_controller.rightBumper();
+    }
+
 }

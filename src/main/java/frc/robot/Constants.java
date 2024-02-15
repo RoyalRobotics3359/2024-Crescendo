@@ -19,7 +19,8 @@ public final class Constants {
     leftBack(6, false), // FIX ME
     rightFront(9, true), // FIX ME
     rightBack(1, true), // FIX ME
-    torusFlywheel(5, false); // FIX ME
+    torusFlywheel(5, false), // FIX ME
+    intakeRoller(10, false); //FIX ME
 
     private int id;
     private boolean isReversed;
@@ -62,6 +63,8 @@ public final class Constants {
 
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
+  public static final double ROLLER_SPEED = 0.25;
   public static final double BANG_BANG_TOLERANCE = 0.5;
+  public static final double INTAKE_DEPLOY_TIME = 2.0; 
   // public static final double  JOYSTICK_DEADBAND = 0.6; 
 }
