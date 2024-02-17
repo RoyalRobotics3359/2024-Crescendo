@@ -20,7 +20,8 @@ public final class Constants {
     rightFront(9, true), // FIX ME
     rightBack(1, true), // FIX ME
     torusFlywheel(5, false), // FIX ME
-    intakeRoller(10, false); //FIX ME
+    frontIntakeRoller(10, false), //FIX ME
+    rearIntakeRoller(11, false); //FIX ME
 
     private int id;
     private boolean isReversed;
@@ -36,10 +37,12 @@ public final class Constants {
   }
 
   public enum Pneumatics {
-    intakeLeftForward(0),
-    intakeLeftReverse(1),
-    intakeRightForward(2),
-    intakeRightReverse(3);
+    intakeForward(0),
+    intakeReverse(1),
+    climberLeftUp(2),
+    climberLeftDown(3),
+    climberRightUp(4),
+    climberRightDown(5);
 
     Pneumatics(int i) {
       id = i;

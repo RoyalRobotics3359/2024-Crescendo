@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import com.revrobotics.CANSparkMax;
@@ -23,16 +24,26 @@ import frc.robot.Constants.Pneumatics;
  */
 public class Intake extends SubsystemBase {
 
-  private DoubleSolenoid left;
-  private DoubleSolenoid right;
-  private CANSparkMax rollers;
+  private DoubleSolenoid raiseLower;
+  private CANSparkMax frontRollers;
+  private CANSparkMax rearRollers;
 
 
   /** Creates a new Intake. */
   public Intake() {
-    left = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
-    right = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeRightForward.getId(), Pneumatics.intakeRightReverse.getId());
-    rollers = new CANSparkMax(Constants.Motors.intakeRoller.getId(), MotorType.kBrushless);
+    raiseLower = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeForward.getId(), Pneumatics.intakeReverse.getId());
+    
+    frontRollers = new CANSparkMax(Constants.Motors.frontIntakeRoller.getId(), MotorType.kBrushless);
+    rearRollers = new CANSparkMax(Constants.Motors.rearIntakeRoller.getId(), MotorType.kBrushless);
+
+    frontRollers.restoreFactoryDefaults();
+    rearRollers.restoreFactoryDefaults();
+
+    frontRollers.setInverted(Constants.Motors.frontIntakeRoller.getReversed());
+    rearRollers.setInverted(Constants.Motors.rearIntakeRoller.getReversed());
+
+    frontRollers.setIdleMode(IdleMode.kBrake);
+    rearRollers.setIdleMode(IdleMode.kBrake);
   }
 
   /***
@@ -48,29 +59,29 @@ public class Intake extends SubsystemBase {
    * 
    */
   public void retract() { 
-    left.set(DoubleSolenoid.Value.kReverse);
-    right.set(DoubleSolenoid.Value.kForward);
+    raiseLower.set(DoubleSolenoid.Value.kReverse);
   }
 
   /**
    * It deploys the intake so that it is in a position where it can pick up notes(game pieces)
    */
   public void extend() {
-    left.set(DoubleSolenoid.Value.kForward);
-    right.set(DoubleSolenoid.Value.kForward);
+    raiseLower.set(DoubleSolenoid.Value.kForward);
   }
 
   /**
    * Turns the rollers on in a forward direction to pull note from the floor into the intake
    */
   public void turnOnRoller() {
-    rollers.set(Constants.ROLLER_SPEED);
+    frontRollers.set(Constants.ROLLER_SPEED);
+    rearRollers.set(Constants.ROLLER_SPEED);
   }
 
   /**
    * Turns the rollers off
    */
   public void turnOffRoller() {
-    rollers.set(0.0);
+    frontRollers.set(0.0);
+    rearRollers.set(0.0);
   }
 }
