@@ -14,28 +14,57 @@ package frc.robot;
  */
 public final class Constants {
   
+  /**
+   * These are the attributes of each motor controller.  Each entry has
+   * its CAN ID number and if the motor is reversed.
+   */
   public enum Motors {
     leftFront(4, false), // FIX ME
     leftBack(6, false), // FIX ME
     rightFront(9, true), // FIX ME
     rightBack(1, true), // FIX ME
-    torusFlywheel(5, false), // FIX ME
-    frontIntakeRoller(10, false), //FIX ME
-    rearIntakeRoller(11, false); //FIX ME
+    transferRoller(8, false), // FIX ME
+    torusFlywheelLeft(5, false), // FIX ME
+    torusFlywheelRight(7, false), // FIX ME
+    shooterRearLeft(2, false), // FIX ME
+    shooterRearRight(3, false), // FIX ME
+    frontIntakeRoller(10, false), // FIX ME
+    rearIntakeRoller(11, false); // FIX ME
 
+    /** CAN ID of the motor controller */
     private int id;
+    /** Is the motor reversed? */
     private boolean isReversed;
 
+    /**
+     * Constructor.  Initializes a new Motors enum entry
+     * 
+     * @param id - CAN ID of the motor controller
+     * @param isReversed - true if the motor runs reversed, false otherwise
+     */
     private Motors(int id, boolean isReversed) {
       this.id = id;
       this.isReversed = isReversed;
     }
 
+    /**
+     * Return the CAN ID of the Motors enum entry.
+     * 
+     * @return int - CAN ID
+     */
     public int getId() { return id; }
     
+    /**
+     * Return if the motor runs reversed.
+     * 
+     * @return - true if the motor runs reversed, false otherwise
+     */
     public boolean getReversed() { return isReversed; }
   }
 
+  /**
+   * These are the channel numbers assigned to each pneumatic solenoid
+   */
   public enum Pneumatics {
     intakeForward(0),
     intakeReverse(1),
@@ -44,12 +73,24 @@ public final class Constants {
     climberRightUp(4),
     climberRightDown(5);
 
-    Pneumatics(int i) {
-      id = i;
+    /**
+     * Constructor.  Initializes a new Pneumatics enum entry
+     * 
+     * @param id - Pneumatics Control Module channel of the solenoid
+     */
+    Pneumatics(int id) {
+      this.id = id;
     }
 
+    /**
+     * Pneumatics Control Module channel number
+     */
     private int id;
 
+    /**
+     * Getter to return the Pneumatics Control Module channel number
+     * @return - Pneumatics Control Module channel number
+     */
     public int getId() {
       return id;  
     }
