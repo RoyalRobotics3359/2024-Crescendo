@@ -9,17 +9,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-/**
- * It extentds the intake to pick up notes from the floor.
- */
-public class DeployIntake extends Command {
+public class RetractIntake extends Command {
 
   private Intake intake; 
   private Timer timer; 
   private boolean done;
 
-  /** Creates a new DeployIntake Command. */
-  public DeployIntake(Intake in) {
+  /** Creates a new RetractIntake Command. */
+  public RetractIntake(Intake in) {
     intake = in;
     done = false;
     addRequirements(intake);
@@ -28,7 +25,7 @@ public class DeployIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Intake: Deploy scheduled");
+    System.out.println("Intake: Retract scheduled");
     timer = new Timer();
     timer.start();
     done = false;
@@ -37,7 +34,7 @@ public class DeployIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.extend();
+    intake.retract();
   }
 
   // Called once the command ends or is interrupted.
@@ -46,7 +43,7 @@ public class DeployIntake extends Command {
     if (interrupted) {
       done = true;
     }
-    System.out.println("Intake: Deploy " + (interrupted ? "Interrupted" : "Complete"));
+    System.out.println("Intake: Retract " + (interrupted ? "Interrupted" : "Complete"));
   }
 
   // Returns true when the command should end.

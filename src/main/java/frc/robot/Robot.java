@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.JoystickDrive;
+import frc.robot.commands.RetractIntake;
 import frc.robot.commands.DeployIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MecDrive;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console, "mec"));
 
     console.getIntakeDeployButton().onTrue(new DeployIntake(intake));
+    console.getIntakeRetractButton().onTrue(new RetractIntake(intake));
 
 
   }
@@ -64,7 +66,6 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    System.out.println(console.getDController().getLeftStickHyp());
     CommandScheduler.getInstance().run();
   }
 

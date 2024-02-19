@@ -113,4 +113,9 @@ public final class Constants {
   public static final double BANG_BANG_TOLERANCE = 0.5;
   public static final double INTAKE_DEPLOY_TIME = 2.0; 
   // public static final double  JOYSTICK_DEADBAND = 0.6; 
+
+  /**
+   * Feature Flags
+   */
+  public static final boolean INTAKE_ROLLERS_EXIST = false;
 }

@@ -33,19 +33,21 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
     left = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
-    right = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeRightReverse.getId(), Pneumatics.intakeRightReverse.getId());
+    right = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeRightForward.getId(), Pneumatics.intakeRightReverse.getId());
+    retract();
+    if (Constants.INTAKE_ROLLERS_EXIST) {
+      frontRollers = new CANSparkMax(Constants.Motors.frontIntakeRoller.getId(), MotorType.kBrushless);
+      rearRollers = new CANSparkMax(Constants.Motors.rearIntakeRoller.getId(), MotorType.kBrushless);
 
-    frontRollers = new CANSparkMax(Constants.Motors.frontIntakeRoller.getId(), MotorType.kBrushless);
-    rearRollers = new CANSparkMax(Constants.Motors.rearIntakeRoller.getId(), MotorType.kBrushless);
+      frontRollers.restoreFactoryDefaults();
+      rearRollers.restoreFactoryDefaults();
 
-    frontRollers.restoreFactoryDefaults();
-    rearRollers.restoreFactoryDefaults();
+      frontRollers.setInverted(Constants.Motors.frontIntakeRoller.isReversed());
+      rearRollers.setInverted(Constants.Motors.rearIntakeRoller.isReversed());
 
-    frontRollers.setInverted(Constants.Motors.frontIntakeRoller.isReversed());
-    rearRollers.setInverted(Constants.Motors.rearIntakeRoller.isReversed());
-
-    frontRollers.setIdleMode(IdleMode.kBrake);
-    rearRollers.setIdleMode(IdleMode.kBrake);
+      frontRollers.setIdleMode(IdleMode.kBrake);
+      rearRollers.setIdleMode(IdleMode.kBrake);
+    }
   }
 
   /***
@@ -77,15 +79,19 @@ public class Intake extends SubsystemBase {
    * Turns the rollers on in a forward direction to pull note from the floor into the intake
    */
   public void turnOnRoller() {
-    frontRollers.set(Constants.ROLLER_SPEED);
-    rearRollers.set(Constants.ROLLER_SPEED);
+    if (Constants.INTAKE_ROLLERS_EXIST) {
+      frontRollers.set(Constants.ROLLER_SPEED);
+      rearRollers.set(Constants.ROLLER_SPEED);
+    }
   }
 
   /**
    * Turns the rollers off
    */
   public void turnOffRoller() {
-    frontRollers.set(0.0);
-    rearRollers.set(0.0);
+    if (Constants.INTAKE_ROLLERS_EXIST) {
+      frontRollers.set(0.0);
+      rearRollers.set(0.0);
+    }
   }
 }
