@@ -15,17 +15,23 @@ import frc.robot.Constants;
 
 public class TorusFlywheel extends SubsystemBase {
   /** Fields */
-  private CANSparkMax flywheel;
+  private CANSparkMax flywheelLeft;
+  private CANSparkMax flywheelRight;
   private RelativeEncoder encoder;
   private BangBangController controller;
 
   /** Creates a new TorusFlywheel. */
   public TorusFlywheel() {
     if (Constants.TORUS_FLYWHEEL_EXISTS) {
-      flywheel = new CANSparkMax(Constants.Motors.torusFlywheel.getId(), MotorType.kBrushless);
-      flywheel.restoreFactoryDefaults();
-      flywheel.setInverted(Constants.Motors.torusFlywheel.getReversed());
-      flywheel.setIdleMode(IdleMode.kCoast);
+      flywheelLeft = new CANSparkMax(Constants.Motors.torusFlywheelLeft.getId(), MotorType.kBrushless);
+      flywheelLeft.restoreFactoryDefaults();
+      flywheelLeft.setInverted(Constants.Motors.torusFlywheelLeft.isReversed());
+      flywheelLeft.setIdleMode(IdleMode.kCoast);
+      
+      flywheelRight = new CANSparkMax(Constants.Motors.torusFlywheelRight.getId(), MotorType.kBrushless);
+      flywheelRight.restoreFactoryDefaults();
+      flywheelRight.setInverted(Constants.Motors.torusFlywheelRight.isReversed());
+      flywheelRight.setIdleMode(IdleMode.kCoast);
 
       controller = new BangBangController();
       controller.setTolerance(Constants.BANG_BANG_TOLERANCE);
@@ -37,11 +43,13 @@ public class TorusFlywheel extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void power(double power) {
-    flywheel.set(power);
+  public void setPower(double power) {
+    flywheelLeft.set(power);
+    flywheelRight.set(power);
   }
 
-  public void setToSetpoint(double setpoint) {
-    flywheel.set(controller.calculate(encoder.getVelocity(), setpoint));
+  public void setVelocity(double setpoint) {
+    flywheelLeft.set(controller.calculate(encoder.getVelocity(), setpoint));
+    flywheelRight.set(controller.calculate(encoder.getVelocity(), setpoint));
   }
 }

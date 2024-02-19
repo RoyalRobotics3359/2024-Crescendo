@@ -24,23 +24,25 @@ import frc.robot.Constants.Pneumatics;
  */
 public class Intake extends SubsystemBase {
 
-  private DoubleSolenoid raiseLower;
+  private DoubleSolenoid left;
+  private DoubleSolenoid right;
   private CANSparkMax frontRollers;
   private CANSparkMax rearRollers;
 
 
   /** Creates a new Intake. */
   public Intake() {
-    raiseLower = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeForward.getId(), Pneumatics.intakeReverse.getId());
-    
+    left = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
+    right = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeRightReverse.getId(), Pneumatics.intakeRightReverse.getId());
+
     frontRollers = new CANSparkMax(Constants.Motors.frontIntakeRoller.getId(), MotorType.kBrushless);
     rearRollers = new CANSparkMax(Constants.Motors.rearIntakeRoller.getId(), MotorType.kBrushless);
 
     frontRollers.restoreFactoryDefaults();
     rearRollers.restoreFactoryDefaults();
 
-    frontRollers.setInverted(Constants.Motors.frontIntakeRoller.getReversed());
-    rearRollers.setInverted(Constants.Motors.rearIntakeRoller.getReversed());
+    frontRollers.setInverted(Constants.Motors.frontIntakeRoller.isReversed());
+    rearRollers.setInverted(Constants.Motors.rearIntakeRoller.isReversed());
 
     frontRollers.setIdleMode(IdleMode.kBrake);
     rearRollers.setIdleMode(IdleMode.kBrake);
@@ -59,14 +61,16 @@ public class Intake extends SubsystemBase {
    * 
    */
   public void retract() { 
-    raiseLower.set(DoubleSolenoid.Value.kReverse);
+    left.set(DoubleSolenoid.Value.kReverse);
+    right.set(DoubleSolenoid.Value.kReverse);
   }
 
   /**
    * It deploys the intake so that it is in a position where it can pick up notes(game pieces)
    */
   public void extend() {
-    raiseLower.set(DoubleSolenoid.Value.kForward);
+    left.set(DoubleSolenoid.Value.kForward);
+    right.set(DoubleSolenoid.Value.kForward);    
   }
 
   /**

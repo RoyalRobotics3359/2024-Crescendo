@@ -60,10 +60,10 @@ public class MecDrive extends SubsystemBase {
       rightFront.restoreFactoryDefaults();
       rightBack.restoreFactoryDefaults();
 
-      leftFront.setInverted(Constants.Motors.leftFront.getReversed());
-      leftBack.setInverted(Constants.Motors.leftBack.getReversed());
-      rightFront.setInverted(Constants.Motors.rightFront.getReversed());
-      rightBack.setInverted(Constants.Motors.rightBack.getReversed());
+      leftFront.setInverted(Constants.Motors.leftFront.isReversed());
+      leftBack.setInverted(Constants.Motors.leftBack.isReversed());
+      rightFront.setInverted(Constants.Motors.rightFront.isReversed());
+      rightBack.setInverted(Constants.Motors.rightBack.isReversed());
 
       leftFront.setIdleMode(IdleMode.kBrake);
       leftBack.setIdleMode(IdleMode.kBrake);

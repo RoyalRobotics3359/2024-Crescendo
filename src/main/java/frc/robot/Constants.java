@@ -59,19 +59,21 @@ public final class Constants {
      * 
      * @return - true if the motor runs reversed, false otherwise
      */
-    public boolean getReversed() { return isReversed; }
+    public boolean isReversed() { return isReversed; }
   }
 
   /**
    * These are the channel numbers assigned to each pneumatic solenoid
    */
   public enum Pneumatics {
-    intakeForward(0),
-    intakeReverse(1),
-    climberLeftUp(2),
-    climberLeftDown(3),
-    climberRightUp(4),
-    climberRightDown(5);
+    intakeLeftForward(0),
+    intakeLeftReverse(1),
+    intakeRightForward(2),
+    intakeRightReverse(3),
+    climberLeftUp(4),
+    climberLeftDown(5),
+    climberRightUp(6),
+    climberRightDown(7);
 
     /**
      * Constructor.  Initializes a new Pneumatics enum entry
