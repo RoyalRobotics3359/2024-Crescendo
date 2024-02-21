@@ -14,6 +14,7 @@ import frc.robot.commands.RetractIntake;
 import frc.robot.commands.DeployIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MecDrive;
+import frc.robot.subsystems.TransferStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
   private MecDrive drive;
   private Intake intake;
+  private TransferStation transferStation; 
   private OperatorConsole console;
 
 
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
 
     drive = new MecDrive();
     intake = new Intake(); 
+    transferStation = new TransferStation();
     console = new OperatorConsole();
 
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console, "mec"));

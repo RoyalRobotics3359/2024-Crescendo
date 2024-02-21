@@ -23,7 +23,8 @@ public final class Constants {
     leftBack(6, false), // FIX ME
     rightFront(9, true), // FIX ME
     rightBack(1, true), // FIX ME
-    transferRoller(8, false), // FIX ME
+    transferStationLeft(8, false), // FIX ME
+    transferStationRight(12, false), // FIX ME
     torusFlywheelLeft(5, false), // FIX ME
     torusFlywheelRight(7, false), // FIX ME
     shooterRearLeft(2, false), // FIX ME
@@ -118,4 +119,6 @@ public final class Constants {
    * Feature Flags
    */
   public static final boolean INTAKE_ROLLERS_EXIST = false;
+  public static final boolean TRANSFER_STATION_EXIST = false;
+  
 }

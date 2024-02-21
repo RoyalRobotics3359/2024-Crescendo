@@ -21,6 +21,8 @@ import frc.robot.Constants.Pneumatics;
  * To do that it has a pair of pneumatic cylinders that can extend or retract
  * the intake from the stored position (inside the frame perimeter at start of
  * the match) to the extended poisition (to pickup a note from the floor).
+ * when extended, the intake must run the rollers forward. when retracted
+ * the intake must run the rolers to transfer the note (game piece) into the hopper. 
  */
 public class Intake extends SubsystemBase {
 
@@ -65,6 +67,7 @@ public class Intake extends SubsystemBase {
   public void retract() { 
     left.set(DoubleSolenoid.Value.kReverse);
     right.set(DoubleSolenoid.Value.kReverse);
+    turnOffRoller();
   }
 
   /**
@@ -72,7 +75,8 @@ public class Intake extends SubsystemBase {
    */
   public void extend() {
     left.set(DoubleSolenoid.Value.kForward);
-    right.set(DoubleSolenoid.Value.kForward);    
+    right.set(DoubleSolenoid.Value.kForward);   
+    turnOnRoller(); 
   }
 
   /**
