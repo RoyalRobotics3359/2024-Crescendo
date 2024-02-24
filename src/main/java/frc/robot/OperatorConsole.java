@@ -7,9 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/** Add your docs here. */
 public class OperatorConsole {
     /** Inner Class */
+    // Class created to recreate multiple controllers without retyping code for another
     public class Controller {
         /**Fields */
         private XboxController controller;
@@ -32,6 +32,7 @@ public class OperatorConsole {
             rightBumper = new JoystickButton(controller, XboxController.Button.kRightBumper.value);
         }
 
+        // Buttons that return the state of each button on xbox controller
         public JoystickButton a() { return aButton; }
         public JoystickButton b() { return bButton; }
         public JoystickButton x() { return xButton; }
@@ -40,7 +41,11 @@ public class OperatorConsole {
         public JoystickButton leftBumper() { return leftBumper; }
         public JoystickButton rightBumper() { return rightBumper; }
 
+        // For all controll sticks on controller, they have a range set - deadband >= control stick >= deadband
+
+        // Left stick data read with applied deadband range
         public double getLeftStickY() {
+            // Multiply by -1 to compensate for reversal of left stick data when read
             double leftY = -1.0 * controller.getLeftY();
             if (leftY <= -1.0 * STICK_DEADBAND || leftY >= STICK_DEADBAND) {
                 return leftY;
@@ -55,6 +60,7 @@ public class OperatorConsole {
             return 0.0;
         }
 
+        // Right stick data read with applied deadband range
         public double getRightStickY() {
             if (controller.getRightY() <= -STICK_DEADBAND || controller.getRightY() >= STICK_DEADBAND) {
                 return controller.getRightY();
@@ -69,8 +75,12 @@ public class OperatorConsole {
             return 0.0;
         }
 
+        // Returns the angle created by the leftX and leftY control stick vector. Uses Math.atan2 to return all possible angles 
+        // between [0, 2pi).
         public double getLeftStickTheta() { return Math.atan2(this.getLeftStickY(), this.getLeftStickX()); }
 
+        // Returns the hypotenuse created by the leftX and leftY control stick vector. Used to calculate the percentage of speed sent
+        // to the mecanum drive.
         public double getLeftStickHyp() { return Math.sqrt(Math.pow(this.getLeftStickX(), 2) + Math.pow(this.getLeftStickY(), 2)); }
 
     }

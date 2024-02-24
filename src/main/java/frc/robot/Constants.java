@@ -99,26 +99,47 @@ public final class Constants {
     }
   }
 
+  public enum LED_COLORS {
+    RED(0.61),
+    BLUE(0.87),
+    GREEN(0.77),
+    ORANGE(0.65),
+    PURPLE(0.91),
+    YELLOW(0.69),
+    RAINBOW(-0.99),
+    TEAM(0.53); // This is the power level for switching between two teams
+
+    private final double color;
+
+    private LED_COLORS(double clr) {
+      color = clr;
+    }
+    
+    public double getColor() {
+      return color;
+    }
+  }
+
 
 
   /** Robot Subsystem Existence */
   public static final boolean MECANUM_DRIVE_EXISTS = true;
   public static final boolean TANK_DRIVE_EXISTS = false;
   public static final boolean TORUS_FLYWHEEL_EXISTS = false;
+  public static final boolean INTAKE_ROLLERS_EXIST = false;
+  public static final boolean TRANSFER_STATION_EXIST = false;
+  public static final boolean LED_LIGHTS_EXIST = false;
 
   public static final boolean DRIVE_MOTION_CONTROL_EXISTS = false;
 
+  // Specific constants for operating manipulators on the robot
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
   public static final double ROLLER_SPEED = 0.25;
   public static final double BANG_BANG_TOLERANCE = 0.5;
-  public static final double INTAKE_DEPLOY_TIME = 2.0; 
-  // public static final double  JOYSTICK_DEADBAND = 0.6; 
+  public static final double INTAKE_DEPLOY_TIME = 2.0;
 
-  /**
-   * Feature Flags
-   */
-  public static final boolean INTAKE_ROLLERS_EXIST = false;
-  public static final boolean TRANSFER_STATION_EXIST = false;
+  // Miscilaneous
+  
   
 }

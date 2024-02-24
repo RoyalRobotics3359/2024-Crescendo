@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -41,6 +43,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    // Allows for limelight to be communicated hard wire via USB and computer
+    // Information: https://docs.limelightvision.io/docs/docs-limelight/getting-started/best-practices
+    for (int port = 5800; port <= 5807; port++) {
+      PortForwarder.add(port, "limelight.local", port);
+    }
+
+
     m_robotContainer = new RobotContainer();
 
     drive = new MecDrive();

@@ -47,9 +47,13 @@ public class MecDrive extends SubsystemBase {
   public MecDrive() {
 
     if (Constants.MECANUM_DRIVE_EXISTS) {
+      // Creates new gyroscope used in field oriented drive and autonomous
       gyro = new ADIS16470_IMU();
       gyro.calibrate();
 
+      // Defines all of the motorcontrollers used. Then it resets them to factory deafaults to account
+      // for any bugs that may arise. Furthermore, it assigns if it is reversed or not, and it sets up
+      // its idle mode (in this case always brake).
       leftFront = new CANSparkMax(Constants.Motors.leftFront.getId(), MotorType.kBrushless);
       leftBack = new CANSparkMax(Constants.Motors.leftBack.getId(), MotorType.kBrushless);
       rightFront = new CANSparkMax(Constants.Motors.rightFront.getId(), MotorType.kBrushless);
@@ -78,6 +82,8 @@ public class MecDrive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  // ALL mecanum code based on information form this video: https://www.youtube.com/watch?v=gnSW2QpkGXQ
 
   public void setSpeed(double magnitude, double theta, double turn) {
     double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
@@ -110,6 +116,7 @@ public class MecDrive extends SubsystemBase {
     }
   }
 
+  // Mecanum code without field oriented drive
   public void setSpeedBasic(double speed, double turn, double strafe) {
     double scale = Math.max(speed + turn + strafe, 1.0);
 
