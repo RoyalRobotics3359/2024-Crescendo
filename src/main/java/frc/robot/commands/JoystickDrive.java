@@ -51,9 +51,14 @@ public class JoystickDrive extends Command {
         //   console.getDController().getLeftStickHyp(), 
         //   console.getDController().getLeftStickTheta(), 
         //   console.getDController().getRightStickX());
-        double speed = console.getDController().getLeftStickY();
+        // double speed = console.getDController().getLeftStickY();
+        // double turn = console.getDController().getRightStickX();
+        // double strafe = console.getDController().getLeftStickX();
+
+        double mag = console.getDController().getLeftStickHyp();
+        double angle = console.getDController().getLeftStickTheta();
         double turn = console.getDController().getRightStickX();
-        double strafe = console.getDController().getLeftStickX();
+
         // if (speed < Constants.JOYSTICK_DEADBAND && speed > -1.0 * Constants.JOYSTICK_DEADBAND) {
         //   speed = 0.0; 
         // }
@@ -64,7 +69,10 @@ public class JoystickDrive extends Command {
         //   strafe = 0.0; 
         // }
 
-        mecDrive.setSpeedBasic(speed, turn, strafe);
+        // mecDrive.setSpeedBasic(speed, turn, strafe);
+        
+        // mecDrive.setSpeed(mag, angle, turn);
+        mecDrive.setSpeedPID(mag, angle, turn);
         break;
       case "tank":
         tankDrive.setVoltage(leftPower, rightPower);

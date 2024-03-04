@@ -13,7 +13,7 @@ import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class TorusFlywheel extends SubsystemBase {
+public class Shooter extends SubsystemBase {
   /** Fields */
   private CANSparkMax flywheelLeft;
   private CANSparkMax flywheelRight;
@@ -21,7 +21,7 @@ public class TorusFlywheel extends SubsystemBase {
   private BangBangController controller;
 
   /** Creates a new TorusFlywheel. */
-  public TorusFlywheel() {
+  public Shooter() {
     if (Constants.TORUS_FLYWHEEL_EXISTS) {
       flywheelLeft = new CANSparkMax(Constants.Motors.torusFlywheelLeft.getId(), MotorType.kBrushless);
       flywheelLeft.restoreFactoryDefaults();

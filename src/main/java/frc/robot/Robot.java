@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +36,8 @@ public class Robot extends TimedRobot {
   private TransferStation transferStation; 
   private OperatorConsole console;
 
+  private Compressor compressor;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -57,6 +61,9 @@ public class Robot extends TimedRobot {
     intake = new Intake(); 
     transferStation = new TransferStation();
     console = new OperatorConsole();
+
+    compressor = new Compressor(PneumaticsModuleType.REVPH);
+    compressor.enableDigital();
 
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console, "mec"));
 

@@ -24,9 +24,16 @@ public class LimelightVision extends SubsystemBase {
   NetworkTableEntry ty;
   NetworkTableEntry ta;
 
-  double x;
-  double y;
-  double area;
+  private double x;
+  private double y;
+  private double area;
+
+  private double mountAngleInDegrees = 0.0;
+  private double lensHeightOffGroundInInches = 0.0;
+  private double goalHeightOffGroundInInches = 0.0;
+
+  private double angleToGoalInDegrees;
+  private double angleToGoalRadians;
 
   /** Creates a new LimelightVision. */
   public LimelightVision() {
@@ -42,6 +49,9 @@ public class LimelightVision extends SubsystemBase {
     x  = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
+
+    angleToGoalInDegrees = mountAngleInDegrees + y;
+    
   }
 
   @Override
@@ -59,5 +69,9 @@ public class LimelightVision extends SubsystemBase {
   public double getXData() { return x; }
   public double getYData() { return y; }
   public double getAreaData() { return area; }
+
+  public double getDistanceFromGoal() { return 0.0; }
+
+
   
 }

@@ -19,16 +19,15 @@ public final class Constants {
    * its CAN ID number and if the motor is reversed.
    */
   public enum Motors {
-    leftFront(4, false), // FIX ME
+    leftFront(2, false), // FIX ME
     leftBack(6, false), // FIX ME
-    rightFront(9, true), // FIX ME
-    rightBack(1, true), // FIX ME
+    rightFront(8, true), // FIX ME
+    rightBack(3, true), // FIX ME
+    transferStationTop(1, false), // FIX ME
     transferStationLeft(8, false), // FIX ME
     transferStationRight(12, false), // FIX ME
     torusFlywheelLeft(5, false), // FIX ME
     torusFlywheelRight(7, false), // FIX ME
-    shooterRearLeft(2, false), // FIX ME
-    shooterRearRight(3, false), // FIX ME
     frontIntakeRoller(10, false), // FIX ME
     rearIntakeRoller(11, false); // FIX ME
 
@@ -123,6 +122,7 @@ public final class Constants {
 
 
   /** Robot Subsystem Existence */
+
   public static final boolean MECANUM_DRIVE_EXISTS = true;
   public static final boolean TANK_DRIVE_EXISTS = false;
   public static final boolean TORUS_FLYWHEEL_EXISTS = false;
@@ -133,13 +133,20 @@ public final class Constants {
   public static final boolean DRIVE_MOTION_CONTROL_EXISTS = false;
 
   // Specific constants for operating manipulators on the robot
+
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
   public static final double ROLLER_SPEED = 0.25;
+  public static final double TRANSFER_STATION_SPEED = 0.4;
+
   public static final double BANG_BANG_TOLERANCE = 0.5;
   public static final double INTAKE_DEPLOY_TIME = 2.0;
 
   // Miscilaneous
   
+  public static final int TRANSFER_STATION_LIMIT_SWITCH_CHANNEL = 0;
+  public static final double ROBOT_TRACK_WIDTH_IN_INCES = 22.25;
+  public static final double ROBOT_WIDTH_IN_INCHES = 29.0;
+  public static final double ROBOT_LENGTH = 30.3125;
   
 }

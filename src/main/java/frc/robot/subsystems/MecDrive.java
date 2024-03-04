@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.EncoderType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -12,6 +15,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearPlantInversionFeedforward;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
@@ -30,18 +34,16 @@ public class MecDrive extends SubsystemBase {
   private CANSparkMax rightBack;
   private ADIS16470_IMU gyro;
 
+  private PIDController controller;
+
+  private RelativeEncoder fl_encoder, bl_encoder, fr_encoder, br_encoder;
+
   private final double kV = 0.01; // volts per (radian per second)
   private final double kA = 0.01; // volts per (radian per second squared)
   private final double stateDev = 0.01;
   private final double measurementDev = 0.01;
   private final double velErrTolerance = 0.01;
   private final double voltageTolerance = 12.0;
-
-  private final LinearSystem<N1,N1,N1> drivePlant = LinearSystemId.identifyVelocitySystem(kV, kA);
-  private final KalmanFilter filter = new KalmanFilter<>(Nat.N1(), Nat.N1(), drivePlant,
-                                      VecBuilder.fill(stateDev), VecBuilder.fill(measurementDev), 0.02);
-  private final LinearQuadraticRegulator<N1,N1,N1> controller = new LinearQuadraticRegulator<>(drivePlant, VecBuilder.fill(velErrTolerance), 
-                                                                VecBuilder.fill(voltageTolerance), 0.02);
 
   /** Creates a new MecanumDrive. */
   public MecDrive() {
@@ -73,7 +75,16 @@ public class MecDrive extends SubsystemBase {
       leftBack.setIdleMode(IdleMode.kBrake);
       rightFront.setIdleMode(IdleMode.kBrake);
       rightBack.setIdleMode(IdleMode.kBrake);
+
+      fl_encoder = leftFront.getEncoder();
+      bl_encoder = leftBack.getEncoder();
+      fr_encoder = rightFront.getEncoder();
+      br_encoder = rightBack.getEncoder();
+
       
+
+      // Defines PID Controller
+      controller = new PIDController(1, 0, 0);
     }
 
   }
@@ -87,6 +98,7 @@ public class MecDrive extends SubsystemBase {
 
   public void setSpeed(double magnitude, double theta, double turn) {
     double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
+    // double gamma = theta;
     /**
      * theta is is the angle of the joystick
      * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
@@ -96,24 +108,99 @@ public class MecDrive extends SubsystemBase {
      * 
      */
 
-    double FL_BR_pow = Math.sin(gamma - Math.PI/4) * magnitude + turn;
-    double FR_BL_pow = Math.sin(gamma + Math.PI/4) * magnitude + turn;
+    double sin = Math.sin(gamma - Math.PI/4);
+    double cos = Math.cos(gamma - Math.PI/4);
+    
+    double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+    leftFront.set(magnitude * cos/max + turn);
+    leftBack.set(magnitude * sin/max + turn);
+    rightFront.set(magnitude * sin/max - turn);
+    rightBack.set(magnitude * cos/max - turn);
+
     /**
      * This scales down the values of the speeds if any's absolute value exceeds 1
      */
-    if (Math.abs(FL_BR_pow) > 1 || Math.abs(FR_BL_pow) > 1) {
-      //double max = Math.max(Math.abs(FL_BR_pow), Math.abs(FR_BL_pow));
-      double max = Math.max(FL_BR_pow, FR_BL_pow);
-      leftFront.set(FL_BR_pow/max * Constants.MAX_MEC_SPEED);
-      leftBack.set(FR_BL_pow/max * Constants.MAX_MEC_SPEED);
-      rightFront.set(FR_BL_pow/max * Constants.MAX_MEC_SPEED);
-      rightBack.set(FL_BR_pow/max  * Constants.MAX_MEC_SPEED);
-    } else {
-      leftFront.set(FL_BR_pow * Constants.MAX_MEC_SPEED);
-      leftBack.set(FR_BL_pow * Constants.MAX_MEC_SPEED);
-      rightFront.set(FR_BL_pow * Constants.MAX_MEC_SPEED);
-      rightBack.set(FL_BR_pow * Constants.MAX_MEC_SPEED);
+
+    if ((magnitude + Math.abs(turn)) > 1) {
+      leftFront.set(magnitude + turn);
+      leftBack.set(magnitude + turn);
+      rightFront.set(magnitude + turn);
+      rightBack.set(magnitude + turn);
     }
+
+  }
+
+  // // Sets field-oriented with PID Loop
+  // public void setSpeedPID(double magnitude, double theta, double turn) {
+  //   double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
+  //   // double gamma = theta;
+  //   /**
+  //    * theta is is the angle of the joystick
+  //    * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
+  //    * 
+  //    * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
+  //    * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
+  //    * 
+  //    */
+
+  //   double sin = Math.sin(gamma - Math.PI/4);
+  //   double cos = Math.cos(gamma - Math.PI/4);
+    
+  //   double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+  //   leftFront.set(controller.calculate(magnitude * cos/max + turn));
+  //   leftBack.set(controller.calculate(magnitude * sin/max + turn));
+  //   rightFront.set(controller.calculate(magnitude * sin/max - turn));
+  //   rightBack.set(controller.calculate(magnitude * cos/max - turn));
+
+  //   /**
+  //    * This scales down the values of the speeds if any's absolute value exceeds 1
+  //    */
+
+  //   if ((magnitude + Math.abs(turn)) > 1) {
+  //     leftFront.set(controller.calculate(magnitude + turn));
+  //     leftBack.set(controller.calculate(magnitude + turn));
+  //     rightFront.set(controller.calculate(magnitude + turn));
+  //     rightBack.set(controller.calculate(magnitude + turn));
+  //   }
+
+  // }
+
+  // Sets field-oriented with PID Loop
+  public void setSpeedPID(double magnitude, double theta, double turn) {
+    double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
+    // double gamma = theta;
+    /**
+     * theta is is the angle of the joystick
+     * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
+     * 
+     * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
+     * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
+     * 
+     */
+
+    double sin = Math.sin(gamma - Math.PI/4);
+    double cos = Math.cos(gamma - Math.PI/4);
+    
+    double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+    leftFront.setVoltage(controller.calculate((magnitude * cos/max + turn) * 12.0, rpmToVoltage(getGearedVelocity(fl_encoder.getVelocity()))));
+    leftBack.setVoltage(controller.calculate((magnitude * sin/max + turn) * 12.0, rpmToVoltage(getGearedVelocity(bl_encoder.getVelocity()))));
+    rightFront.setVoltage(controller.calculate((magnitude * sin/max - turn) * 12.0, rpmToVoltage(getGearedVelocity(fr_encoder.getVelocity()))));
+    rightBack.setVoltage(controller.calculate((magnitude * cos/max - turn) * 12.0, rpmToVoltage(getGearedVelocity(br_encoder.getVelocity()))));
+
+    /**
+     * This scales down the values of the speeds if any's absolute value exceeds 1
+     */
+
+    if ((magnitude + Math.abs(turn)) > 1) {
+      leftFront.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(fl_encoder.getVelocity()))));
+      leftBack.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(bl_encoder.getVelocity()))));
+      rightFront.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(fr_encoder.getVelocity()))));
+      rightBack.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(br_encoder.getVelocity()))));
+    }
+
   }
 
   // Mecanum code without field oriented drive
@@ -143,5 +230,16 @@ public class MecDrive extends SubsystemBase {
     rightFront.set(0);
     rightBack.set(0);
   }
+
+  // Converts the velocity from the encoder to the velocity with the gear ratio
+  private double getGearedVelocity(double encoderVelocity) {
+    return ((encoderVelocity / 5676) * 5.8125) / 10.71;
+  }
+
+  // converts the rpm to voltage
+  private double rpmToVoltage(double rpm) {
+    return (12/5767.0) * rpm;
+  }
+
 
 }
