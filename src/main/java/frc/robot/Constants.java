@@ -26,8 +26,8 @@ public final class Constants {
     transferStationTop(1, false), // FIX ME
     transferStationLeft(8, false), // FIX ME
     transferStationRight(12, false), // FIX ME
-    torusFlywheelLeft(5, false), // FIX ME
-    torusFlywheelRight(7, false), // FIX ME
+    torusFlywheelLeft(2, false), // FIX ME
+    torusFlywheelRight(6, false), // FIX ME
     frontIntakeRoller(10, false), // FIX ME
     rearIntakeRoller(11, false); // FIX ME
 
@@ -123,9 +123,9 @@ public final class Constants {
 
   /** Robot Subsystem Existence */
 
-  public static final boolean MECANUM_DRIVE_EXISTS = true;
+  public static final boolean MECANUM_DRIVE_EXISTS = false;
   public static final boolean TANK_DRIVE_EXISTS = false;
-  public static final boolean TORUS_FLYWHEEL_EXISTS = false;
+  public static final boolean TORUS_FLYWHEEL_EXISTS = true;
   public static final boolean INTAKE_ROLLERS_EXIST = false;
   public static final boolean TRANSFER_STATION_EXIST = false;
   public static final boolean LED_LIGHTS_EXIST = false;
@@ -138,6 +138,8 @@ public final class Constants {
   public static final double MAX_MEC_SPEED = 1.0;
   public static final double ROLLER_SPEED = 0.25;
   public static final double TRANSFER_STATION_SPEED = 0.4;
+  public static final double SHOOT_HIGH_GOAL_SPEED = 0.7;
+  public static final double SHOOT_LOW_GOAL_SPEED = 0.4;
 
   public static final double BANG_BANG_TOLERANCE = 0.5;
   public static final double INTAKE_DEPLOY_TIME = 2.0;

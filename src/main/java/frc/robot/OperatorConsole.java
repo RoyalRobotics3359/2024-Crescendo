@@ -87,12 +87,17 @@ public class OperatorConsole {
 
     /** Fields */
     private Controller d_controller;
+    private Controller g_controller;
+
     /** Constructor */
     public OperatorConsole() {
         d_controller = new Controller(0);
+        g_controller = new Controller(1);
     }
 
     public Controller getDController() { return d_controller; }
+
+    public Controller getGController() { return g_controller; }
 
     /**
      * returns the button to use deploy the intake

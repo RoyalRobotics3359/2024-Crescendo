@@ -27,21 +27,12 @@ public class TurnOnTransferStation extends Command {
 
   private CANSparkMax roller;
 
-  /** Is the command finished? */
-  private boolean done;
+  private boolean stage1Power;
 
   /** Creates a new TurnOnTransferStation. */
-  public TurnOnTransferStation(TransferStation t) {
+  public TurnOnTransferStation(TransferStation t, boolean isStage1Power) {
     transfer = t;
-    if (Constants.TRANSFER_STATION_EXIST) {
-      roller = new CANSparkMax(Constants.Motors.transferStationTop.getId(), MotorType.kBrushless);
-
-      roller.restoreFactoryDefaults();
-
-      roller.setInverted(Constants.Motors.rearIntakeRoller.isReversed());
-
-      roller.setIdleMode(IdleMode.kBrake);
-    }
+    stage1Power = isStage1Power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(transfer);
   }
@@ -49,23 +40,22 @@ public class TurnOnTransferStation extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    done = false;
     System.out.println("Transfer: Turn On scheduled");
-    done = false;    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!done) {
-      transfer.set(Constants.TRANSFER_STATION_SPEED);
+    if (stage1Power) {
+      transfer.setStage1Power();
+    } else {
+      transfer.setStage2Power();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    done = true;
     System.out.println("Transfer: Turn On " + (interrupted ? "Interrupted" : "Complete"));
   }
 

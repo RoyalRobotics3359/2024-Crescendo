@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.TransferStation_Commands.TransferNote;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferStation;
 
@@ -22,7 +23,7 @@ public class IntakeNoteFromFloor extends SequentialCommandGroup {
 
     private Intake intake;
 
-    private TransferStation transfer);
+    private TransferStation transfer;
 
   /** Creates a new IntakeNoteFromFloor. */
   public IntakeNoteFromFloor(Intake in, TransferStation t) {

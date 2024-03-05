@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Shooter_Commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Shooter;
@@ -20,18 +20,18 @@ import frc.robot.subsystems.TransferStation;
 public class ShootHighGoal extends SequentialCommandGroup {
 
   private Shooter shooter;
-  private TransferStation transfer;
+  // private TransferStation transfer;
 
   /** Creates a new ShootHighGoal. */
-  public ShootHighGoal(Shooter s, TransferStation t) {
+  public ShootHighGoal(Shooter s/*, TransferStation t*/) {
 
     shooter = s;
-    transfer = t;
+    //transfer = t;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new BringShooterUpToSpeed(shooter, true), 
-      new TurnOnTransferStation(transfer), 
-      new TurnOffShooter(shooter));
+      new BringShooterUpToSpeed(shooter, true)//, 
+      //new TurnOnTransferStation(transfer), 
+      /*new TurnOffShooter(shooter)*/);
   }
 }

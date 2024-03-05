@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -41,6 +42,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+    SmartDashboard.putNumber("Shooter Velocity Error", controller.getError());
   }
 
   public void setPower(double power) {
@@ -48,8 +51,19 @@ public class Shooter extends SubsystemBase {
     flywheelRight.set(power);
   }
 
-  public void setVelocity(double setpoint) {
-    flywheelLeft.set(controller.calculate(encoder.getVelocity(), setpoint));
-    flywheelRight.set(controller.calculate(encoder.getVelocity(), setpoint));
+  /**
+   * 
+   * @param setpoint - Percentage of max RPM (5676) in range 0.0-1.0
+   */
+  public void setVelocityPercentage(double setpoint) {
+    flywheelLeft.set(controller.calculate(encoder.getVelocity(), setpoint * 5676));
+    flywheelRight.set(controller.calculate(encoder.getVelocity(), setpoint * 5676));
+  }
+
+  public boolean isUpToSpeed(double setpoint) { 
+    double minRPM = setpoint * 5676 * 0.97;
+    double maxRPM = setpoint * 5676 * 1.03;
+    double velocity = encoder.getVelocity();
+    return (velocity >= minRPM && velocity <= maxRPM); 
   }
 }

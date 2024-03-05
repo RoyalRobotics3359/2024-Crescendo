@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.JoystickDrive;
-import frc.robot.commands.RetractIntake;
-import frc.robot.commands.DeployIntake;
+// import frc.robot.commands.RetractIntake;
+import frc.robot.commands.Shooter_Commands.ShootHighGoal;
+// import frc.robot.commands.DeployIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MecDrive;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TransferStation;
 
 /**
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
   private Intake intake;
   private TransferStation transferStation; 
   private OperatorConsole console;
+  private Shooter shooter;
 
   private Compressor compressor;
 
@@ -61,15 +64,17 @@ public class Robot extends TimedRobot {
     intake = new Intake(); 
     transferStation = new TransferStation();
     console = new OperatorConsole();
+    shooter = new Shooter();
 
     compressor = new Compressor(PneumaticsModuleType.REVPH);
     compressor.enableDigital();
 
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console, "mec"));
 
-    console.getIntakeDeployButton().onTrue(new DeployIntake(intake));
-    console.getIntakeRetractButton().onTrue(new RetractIntake(intake));
+    // console.getIntakeDeployButton().onTrue(new DeployIntake(intake));
+    // console.getIntakeRetractButton().onTrue(new RetractIntake(intake));
 
+    console.getDController().a().onTrue(new ShootHighGoal(shooter));
 
   }
 

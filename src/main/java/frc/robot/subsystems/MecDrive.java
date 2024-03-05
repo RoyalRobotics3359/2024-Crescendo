@@ -84,7 +84,7 @@ public class MecDrive extends SubsystemBase {
       
 
       // Defines PID Controller
-      controller = new PIDController(1, 0, 0);
+      controller = new PIDController(0, 0, 0);
     }
 
   }
@@ -113,16 +113,18 @@ public class MecDrive extends SubsystemBase {
     
     double max = Math.max(Math.abs(sin), Math.abs(cos));
 
-    leftFront.set(magnitude * cos/max + turn);
-    leftBack.set(magnitude * sin/max + turn);
-    rightFront.set(magnitude * sin/max - turn);
-    rightBack.set(magnitude * cos/max - turn);
+    if (Constants.MECANUM_DRIVE_EXISTS) {
+      leftFront.set(magnitude * cos/max + turn);
+      leftBack.set(magnitude * sin/max + turn);
+      rightFront.set(magnitude * sin/max - turn);
+      rightBack.set(magnitude * cos/max - turn);
+    }
 
     /**
      * This scales down the values of the speeds if any's absolute value exceeds 1
      */
 
-    if ((magnitude + Math.abs(turn)) > 1) {
+    if (Constants.MECANUM_DRIVE_EXISTS && (magnitude + Math.abs(turn)) > 1) {
       leftFront.set(magnitude + turn);
       leftBack.set(magnitude + turn);
       rightFront.set(magnitude + turn);
@@ -130,42 +132,6 @@ public class MecDrive extends SubsystemBase {
     }
 
   }
-
-  // // Sets field-oriented with PID Loop
-  // public void setSpeedPID(double magnitude, double theta, double turn) {
-  //   double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
-  //   // double gamma = theta;
-  //   /**
-  //    * theta is is the angle of the joystick
-  //    * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
-  //    * 
-  //    * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
-  //    * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
-  //    * 
-  //    */
-
-  //   double sin = Math.sin(gamma - Math.PI/4);
-  //   double cos = Math.cos(gamma - Math.PI/4);
-    
-  //   double max = Math.max(Math.abs(sin), Math.abs(cos));
-
-  //   leftFront.set(controller.calculate(magnitude * cos/max + turn));
-  //   leftBack.set(controller.calculate(magnitude * sin/max + turn));
-  //   rightFront.set(controller.calculate(magnitude * sin/max - turn));
-  //   rightBack.set(controller.calculate(magnitude * cos/max - turn));
-
-  //   /**
-  //    * This scales down the values of the speeds if any's absolute value exceeds 1
-  //    */
-
-  //   if ((magnitude + Math.abs(turn)) > 1) {
-  //     leftFront.set(controller.calculate(magnitude + turn));
-  //     leftBack.set(controller.calculate(magnitude + turn));
-  //     rightFront.set(controller.calculate(magnitude + turn));
-  //     rightBack.set(controller.calculate(magnitude + turn));
-  //   }
-
-  // }
 
   // Sets field-oriented with PID Loop
   public void setSpeedPID(double magnitude, double theta, double turn) {
@@ -185,20 +151,22 @@ public class MecDrive extends SubsystemBase {
     
     double max = Math.max(Math.abs(sin), Math.abs(cos));
 
-    leftFront.setVoltage(controller.calculate((magnitude * cos/max + turn) * 12.0, rpmToVoltage(getGearedVelocity(fl_encoder.getVelocity()))));
-    leftBack.setVoltage(controller.calculate((magnitude * sin/max + turn) * 12.0, rpmToVoltage(getGearedVelocity(bl_encoder.getVelocity()))));
-    rightFront.setVoltage(controller.calculate((magnitude * sin/max - turn) * 12.0, rpmToVoltage(getGearedVelocity(fr_encoder.getVelocity()))));
-    rightBack.setVoltage(controller.calculate((magnitude * cos/max - turn) * 12.0, rpmToVoltage(getGearedVelocity(br_encoder.getVelocity()))));
+    if (Constants.MECANUM_DRIVE_EXISTS) {
+      leftFront.set(controller.calculate(magnitude * cos/max + turn));
+      leftBack.set(controller.calculate(magnitude * sin/max + turn));
+      rightFront.set(controller.calculate(magnitude * sin/max - turn));
+      rightBack.set(controller.calculate(magnitude * cos/max - turn));
+    }
 
     /**
      * This scales down the values of the speeds if any's absolute value exceeds 1
      */
 
-    if ((magnitude + Math.abs(turn)) > 1) {
-      leftFront.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(fl_encoder.getVelocity()))));
-      leftBack.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(bl_encoder.getVelocity()))));
-      rightFront.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(fr_encoder.getVelocity()))));
-      rightBack.setVoltage(controller.calculate((magnitude + turn) * 12.0, rpmToVoltage(getGearedVelocity(br_encoder.getVelocity()))));
+    if (Constants.MECANUM_DRIVE_EXISTS && (magnitude + Math.abs(turn)) > 1) {
+      leftFront.set(controller.calculate(magnitude + turn));
+      leftBack.set(controller.calculate(magnitude + turn));
+      rightFront.set(controller.calculate(magnitude + turn));
+      rightBack.set(controller.calculate(magnitude + turn));
     }
 
   }
@@ -212,10 +180,12 @@ public class MecDrive extends SubsystemBase {
     double rightFrontPower = ((speed - turn - strafe) / scale);
     double rightBackPower = ((speed - turn + strafe) / scale);
 
-    leftFront.set(leftFrontPower);
-    leftBack.set(leftBackPower);
-    rightFront.set (rightFrontPower);
-    rightBack.set (rightBackPower);
+    if (Constants.MECANUM_DRIVE_EXISTS) {
+      leftFront.set(leftFrontPower);
+      leftBack.set(leftBackPower);
+      rightFront.set (rightFrontPower);
+      rightBack.set (rightBackPower);
+    }
   
     // Add values to the smart dashboard
     SmartDashboard.putNumber("LF Power", leftFrontPower);
@@ -225,10 +195,12 @@ public class MecDrive extends SubsystemBase {
   }
 
   public void brake() {
-    leftFront.set(0);
-    leftBack.set(0);
-    rightFront.set(0);
-    rightBack.set(0);
+    if (Constants.MECANUM_DRIVE_EXISTS) {
+      leftFront.set(0);
+      leftBack.set(0);
+      rightFront.set(0);
+      rightBack.set(0);
+    }
   }
 
   // Converts the velocity from the encoder to the velocity with the gear ratio
