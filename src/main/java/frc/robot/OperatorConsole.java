@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class OperatorConsole {
     /** Inner Class */
@@ -16,7 +17,7 @@ public class OperatorConsole {
         private JoystickButton aButton, bButton, xButton, yButton, leftBumper, rightBumper;
 
         /** Constants */
-        private double TRIGGER_DEADBAND = 0.20;
+        private double TRIGGER_DEADBAND = 0.50;
         private double STICK_DEADBAND = 0.20;
     
         /**Constructor */
@@ -40,6 +41,16 @@ public class OperatorConsole {
 
         public JoystickButton leftBumper() { return leftBumper; }
         public JoystickButton rightBumper() { return rightBumper; }
+
+
+        // Uses a lambda function to return boolean value if trigger has been pressed
+        public Trigger leftTrigger() {
+            return new Trigger(() -> (controller.getRawAxis(XboxController.Axis.kLeftTrigger.value) >= TRIGGER_DEADBAND));
+        }
+
+        public Trigger rightTrigger() {
+            return new Trigger(() -> (controller.getRawAxis(XboxController.Axis.kRightTrigger.value) >= TRIGGER_DEADBAND));
+        }
 
         // For all controll sticks on controller, they have a range set - deadband >= control stick >= deadband
 

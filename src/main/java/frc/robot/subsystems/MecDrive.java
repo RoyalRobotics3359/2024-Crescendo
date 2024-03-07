@@ -23,7 +23,9 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 public class MecDrive extends SubsystemBase {
@@ -34,16 +36,11 @@ public class MecDrive extends SubsystemBase {
   private CANSparkMax rightBack;
   private ADIS16470_IMU gyro;
 
-  private PIDController controller;
+  private SysIdRoutine routine;
 
   private RelativeEncoder fl_encoder, bl_encoder, fr_encoder, br_encoder;
 
-  private final double kV = 0.01; // volts per (radian per second)
-  private final double kA = 0.01; // volts per (radian per second squared)
-  private final double stateDev = 0.01;
-  private final double measurementDev = 0.01;
-  private final double velErrTolerance = 0.01;
-  private final double voltageTolerance = 12.0;
+  private PIDController controller;
 
   /** Creates a new MecanumDrive. */
   public MecDrive() {
@@ -80,9 +77,7 @@ public class MecDrive extends SubsystemBase {
       bl_encoder = leftBack.getEncoder();
       fr_encoder = rightFront.getEncoder();
       br_encoder = rightBack.getEncoder();
-
       
-
       // Defines PID Controller
       controller = new PIDController(0, 0, 0);
     }
@@ -203,6 +198,39 @@ public class MecDrive extends SubsystemBase {
     }
   }
 
+  public void setSpeedVoltage(double magnitude, double theta, double turn) {
+    if (Constants.MECANUM_DRIVE_EXISTS) {
+      double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
+      // double gamma = theta;
+      /**
+       * theta is is the angle of the joystick
+       * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
+       * 
+       * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
+       * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
+       * 
+       */
+
+      double sin = Math.sin(gamma - Math.PI/4);
+      double cos = Math.cos(gamma - Math.PI/4);
+      
+      double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+      leftFront.set(magnitude * cos/max + turn);
+      leftBack.set(magnitude * sin/max + turn);
+      rightFront.set(magnitude * sin/max - turn);
+      rightBack.set(magnitude * cos/max - turn);
+
+      if (magnitude + Math.abs(turn) > 1) {
+        leftFront.setVoltage((magnitude + turn) * 12.0);
+        leftBack.setVoltage((magnitude + turn) * 12.0);
+        rightFront.setVoltage((magnitude + turn) * 12.0);
+        rightBack.setVoltage((magnitude + turn) * 12.0);
+      }      
+
+    }
+  }
+
   // Converts the velocity from the encoder to the velocity with the gear ratio
   private double getGearedVelocity(double encoderVelocity) {
     return ((encoderVelocity / 5676) * 5.8125) / 10.71;
@@ -214,4 +242,5 @@ public class MecDrive extends SubsystemBase {
   }
 
 
+  
 }

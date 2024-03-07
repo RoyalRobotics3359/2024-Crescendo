@@ -6,9 +6,16 @@ package frc.robot;
 
 // import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
-import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Intake_Commands.IntakeNoteFromFloor;
+import frc.robot.commands.Shooter_Commands.ShootHighGoal;
+import frc.robot.commands.Shooter_Commands.ShootLowGoal;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.MecDrive;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TransferStation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,9 +32,12 @@ public class RobotContainer {
   private OperatorConsole console;
 
   // Subsystems
+  private MecDrive drive;
+  private Intake intake;
+  private Shooter shooter;
+  private TransferStation transfer;
 
   // Commands
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,6 +63,13 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
+    // FIX ME: CHANGE TO GAME CONTROLLER
+    //console.getDController().leftBumper().onTrue(new DeployIntake(intake));
+    //console.getDController().rightBumper().onTrue(new RetractIntake(intake));
+    console.getDController().rightBumper().onTrue(new IntakeNoteFromFloor(intake, transfer));
+    
+    console.getDController().leftTrigger().onTrue(new ShootLowGoal(shooter, transfer));
+    console.getDController().rightTrigger().onTrue(new ShootHighGoal(shooter, transfer));
 
   }
 

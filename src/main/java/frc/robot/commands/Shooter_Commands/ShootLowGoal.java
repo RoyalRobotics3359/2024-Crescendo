@@ -4,16 +4,36 @@
 
 package frc.robot.commands.Shooter_Commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.TransferStation_Commands.TransferNote;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TransferStation;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
+/**
+ * - Brings shooter up to speed
+ * - Turn on transfer station to bring note into shooter
+ * - turn off shooter
+ */
 public class ShootLowGoal extends SequentialCommandGroup {
-  /** Creates a new ShootLowGoal. */
-  public ShootLowGoal() {
+
+  private Shooter shooter;
+  private TransferStation transfer;
+
+  /** Creates a new ShootHighGoal. */
+  public ShootLowGoal(Shooter s, TransferStation t) {
+
+    shooter = s;
+    transfer = t;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(
+      new ParallelCommandGroup(new BringShooterUpToSpeed(shooter, false), new TransferNote(transfer)),
+      new TurnOffShooter(shooter)
+      );
   }
 }

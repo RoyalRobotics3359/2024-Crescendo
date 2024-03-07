@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.JoystickDrive;
 // import frc.robot.commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
@@ -60,6 +60,8 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer();
 
+    CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
+
     drive = new MecDrive();
     intake = new Intake(); 
     transferStation = new TransferStation();
@@ -68,13 +70,6 @@ public class Robot extends TimedRobot {
 
     compressor = new Compressor(PneumaticsModuleType.REVPH);
     compressor.enableDigital();
-
-    CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console, "mec"));
-
-    // console.getIntakeDeployButton().onTrue(new DeployIntake(intake));
-    // console.getIntakeRetractButton().onTrue(new RetractIntake(intake));
-
-    console.getDController().a().onTrue(new ShootHighGoal(shooter));
 
   }
 

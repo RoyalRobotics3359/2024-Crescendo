@@ -27,8 +27,10 @@ public class TransferNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    transfer.setStage1Power();
-    transfer.setStage2Power();
+    if (!transfer.switchPressed()) {
+      transfer.setStage1Power();
+      transfer.setStage2Power();
+    }
   }
 
   // Called once the command ends or is interrupted.
