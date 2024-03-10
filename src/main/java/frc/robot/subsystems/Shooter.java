@@ -18,7 +18,8 @@ public class Shooter extends SubsystemBase {
   /** Fields */
   private CANSparkMax flywheelLeft;
   private CANSparkMax flywheelRight;
-  private RelativeEncoder encoder;
+  private RelativeEncoder leftEncoder;
+  private RelativeEncoder rightEncoder;
   private BangBangController controller;
 
   /** Creates a new TorusFlywheel. */
@@ -34,6 +35,9 @@ public class Shooter extends SubsystemBase {
       flywheelRight.setInverted(Constants.Motors.torusFlywheelRight.isReversed());
       flywheelRight.setIdleMode(IdleMode.kCoast);
 
+      leftEncoder = flywheelLeft.getEncoder();
+      rightEncoder = flywheelLeft.getEncoder();
+
       controller = new BangBangController();
       controller.setTolerance(Constants.BANG_BANG_TOLERANCE);
     }
@@ -42,8 +46,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
-    SmartDashboard.putNumber("Shooter Velocity Error", controller.getError());
   }
 
   public void setPower(double power) {
@@ -56,14 +58,14 @@ public class Shooter extends SubsystemBase {
    * @param setpoint - Percentage of max RPM (5676) in range 0.0-1.0
    */
   public void setVelocityPercentage(double setpoint) {
-    flywheelLeft.set(controller.calculate(encoder.getVelocity(), setpoint * 5676));
-    flywheelRight.set(controller.calculate(encoder.getVelocity(), setpoint * 5676));
+    flywheelLeft.set(controller.calculate(leftEncoder.getVelocity(), setpoint * 5676));
+    flywheelRight.set(controller.calculate(rightEncoder.getVelocity(), setpoint * 5676));
   }
 
   public boolean isUpToSpeed(double setpoint) { 
     double minRPM = setpoint * 5676 * 0.97;
     double maxRPM = setpoint * 5676 * 1.03;
-    double velocity = encoder.getVelocity();
+    double velocity = (leftEncoder.getVelocity() + rightEncoder.getVelocity())/2;
     return (velocity >= minRPM && velocity <= maxRPM); 
   }
 }

@@ -58,10 +58,10 @@ public class MecDrive extends SubsystemBase {
       rightFront = new CANSparkMax(Constants.Motors.rightFront.getId(), MotorType.kBrushless);
       rightBack = new CANSparkMax(Constants.Motors.rightBack.getId(), MotorType.kBrushless);
 
-      leftFront.restoreFactoryDefaults();
-      leftBack.restoreFactoryDefaults();
-      rightFront.restoreFactoryDefaults();
-      rightBack.restoreFactoryDefaults();
+      // leftFront.restoreFactoryDefaults();
+      // leftBack.restoreFactoryDefaults();
+      // rightFront.restoreFactoryDefaults();
+      // rightBack.restoreFactoryDefaults();
 
       leftFront.setInverted(Constants.Motors.leftFront.isReversed());
       leftBack.setInverted(Constants.Motors.leftBack.isReversed());
@@ -168,25 +168,26 @@ public class MecDrive extends SubsystemBase {
 
   // Mecanum code without field oriented drive
   public void setSpeedBasic(double speed, double turn, double strafe) {
-    double scale = Math.max(speed + turn + strafe, 1.0);
-
-    double leftFrontPower = ((speed + turn + strafe) / scale);
-    double leftBackPower = ((speed + turn - strafe) / scale);
-    double rightFrontPower = ((speed - turn - strafe) / scale);
-    double rightBackPower = ((speed - turn + strafe) / scale);
-
     if (Constants.MECANUM_DRIVE_EXISTS) {
+      double scale = Math.max(speed + turn + strafe, 1.0);
+
+      double leftFrontPower = ((speed + turn + strafe) / scale);
+      double leftBackPower = ((speed + turn - strafe) / scale);
+      double rightFrontPower = ((speed - turn - strafe) / scale);
+      double rightBackPower = ((speed - turn + strafe) / scale);
+
       leftFront.set(leftFrontPower);
       leftBack.set(leftBackPower);
       rightFront.set (rightFrontPower);
       rightBack.set (rightBackPower);
+      
+    
+      // Add values to the smart dashboard
+      SmartDashboard.putNumber("LF Power", leftFrontPower);
+      SmartDashboard.putNumber("LB Power", leftBackPower); 
+      SmartDashboard.putNumber("RF Power", rightFrontPower);
+      SmartDashboard.putNumber("RB Power", rightBackPower);
     }
-  
-    // Add values to the smart dashboard
-    SmartDashboard.putNumber("LF Power", leftFrontPower);
-    SmartDashboard.putNumber("LB Power", leftBackPower); 
-    SmartDashboard.putNumber("RF Power", rightFrontPower);
-    SmartDashboard.putNumber("RB Power", rightBackPower);
   }
 
   public void brake() {

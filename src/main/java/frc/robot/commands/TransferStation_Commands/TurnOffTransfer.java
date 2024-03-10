@@ -4,17 +4,15 @@
 
 package frc.robot.commands.TransferStation_Commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TransferStation;
 
-public class TransferNote extends Command {
+public class TurnOffTransfer extends Command {
 
   private TransferStation transfer;
-  private Timer timer;
 
-  /** Creates a new TransferNote. */
-  public TransferNote(TransferStation t) {
+  /** Creates a new TurnOffCommand. */
+  public TurnOffTransfer(TransferStation t) {
 
     transfer = t;
 
@@ -24,30 +22,24 @@ public class TransferNote extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    timer = new Timer();
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (true /* Digital Switch is true */) {
-      transfer.setStage1Power();
-      transfer.setStage2Power();
-    }
+    transfer.brakeStage1();
+    transfer.brakeStage2();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    transfer.brakeStage1();
-    transfer.brakeStage2();
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(5.0);
+    return true;
   }
 }

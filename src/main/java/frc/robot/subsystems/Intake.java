@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Constants.Pneumatics;
 
 /***
@@ -28,28 +29,30 @@ public class Intake extends SubsystemBase {
 
   private DoubleSolenoid left;
   private DoubleSolenoid right;
-  private CANSparkMax frontRollers;
-  private CANSparkMax rearRollers;
+  private CANSparkMax roller;
 
+  private Robot robot;
 
   /** Creates a new Intake. */
-  public Intake() {
+  public Intake(Robot r) {
     if (Constants.INTAKE_ROLLERS_EXIST) {
-      left = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
-      right = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Pneumatics.intakeRightForward.getId(), Pneumatics.intakeRightReverse.getId());
+      // left = new DoubleSolenoid(PneumaticsModuleType.REVPH, Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
+      // right = new DoubleSolenoid(PneumaticsModuleType.REVPH, Pneumatics.intakeRightForward.getId(), Pneumatics.intakeRightReverse.getId());
+
+      robot = r;
+
+      left = robot.getPneumaticHub().makeDoubleSolenoid(Pneumatics.intakeLeftForward.getId(), Pneumatics.intakeLeftReverse.getId());
+      right = robot.getPneumaticHub().makeDoubleSolenoid(Pneumatics.intakeRightForward.getId(), Pneumatics.intakeRightReverse.getId());
+
+      roller = new CANSparkMax(Constants.Motors.IntakeRoller.getId(), MotorType.kBrushed);
+
+      roller.restoreFactoryDefaults();
+
+      roller.setInverted(Constants.Motors.IntakeRoller.isReversed());
+
+      roller.setIdleMode(IdleMode.kBrake);
+
       retract();
-
-      frontRollers = new CANSparkMax(Constants.Motors.frontIntakeRoller.getId(), MotorType.kBrushless);
-      rearRollers = new CANSparkMax(Constants.Motors.rearIntakeRoller.getId(), MotorType.kBrushless);
-
-      frontRollers.restoreFactoryDefaults();
-      rearRollers.restoreFactoryDefaults();
-
-      frontRollers.setInverted(Constants.Motors.frontIntakeRoller.isReversed());
-      rearRollers.setInverted(Constants.Motors.rearIntakeRoller.isReversed());
-
-      frontRollers.setIdleMode(IdleMode.kBrake);
-      rearRollers.setIdleMode(IdleMode.kBrake);
     }
   }
 
@@ -85,8 +88,7 @@ public class Intake extends SubsystemBase {
    */
   public void turnOnRoller() {
     if (Constants.INTAKE_ROLLERS_EXIST) {
-      frontRollers.set(Constants.ROLLER_SPEED);
-      rearRollers.set(Constants.ROLLER_SPEED);
+      roller.set(Constants.ROLLER_SPEED);
     }
   }
 
@@ -95,8 +97,7 @@ public class Intake extends SubsystemBase {
    */
   public void turnOffRoller() {
     if (Constants.INTAKE_ROLLERS_EXIST) {
-      frontRollers.set(0.0);
-      rearRollers.set(0.0);
+      roller.set(0.0);
     }
   }
 }

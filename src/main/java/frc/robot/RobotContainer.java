@@ -9,9 +9,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Climber_Commands.DeployClimber;
+import frc.robot.commands.Climber_Commands.RetractClimber;
+import frc.robot.commands.Intake_Commands.DeployIntake;
 import frc.robot.commands.Intake_Commands.IntakeNoteFromFloor;
+import frc.robot.commands.Intake_Commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
 import frc.robot.commands.Shooter_Commands.ShootLowGoal;
+import frc.robot.commands.TransferStation_Commands.TurnOffTransfer;
+import frc.robot.commands.TransferStation_Commands.TurnOnTransfer;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MecDrive;
 import frc.robot.subsystems.Shooter;
@@ -36,11 +43,19 @@ public class RobotContainer {
   private Intake intake;
   private Shooter shooter;
   private TransferStation transfer;
+  private Climb climb;
 
   // Commands
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(OperatorConsole oc, MecDrive d, Intake i, Shooter s, TransferStation t, Climb c) {
+
+    console = oc;
+    drive = d;
+    intake = i;
+    shooter = s;
+    transfer = t;
+    climb = c;
     // Configure the trigger bindings
     configureBindings();
   }
@@ -64,12 +79,19 @@ public class RobotContainer {
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     // FIX ME: CHANGE TO GAME CONTROLLER
-    //console.getDController().leftBumper().onTrue(new DeployIntake(intake));
-    //console.getDController().rightBumper().onTrue(new RetractIntake(intake));
-    console.getDController().rightBumper().onTrue(new IntakeNoteFromFloor(intake, transfer));
+    console.getGController().leftBumper().onTrue(new DeployIntake(intake));
+    console.getGController().rightBumper().onTrue(new RetractIntake(intake));
+    // console.getGController().rightBumper().onTrue(new IntakeNoteFromFloor(intake, transfer));
     
-    console.getDController().leftTrigger().onTrue(new ShootLowGoal(shooter, transfer));
-    console.getDController().rightTrigger().onTrue(new ShootHighGoal(shooter, transfer));
+    console.getGController().leftTrigger().onTrue(new ShootLowGoal(shooter, transfer));
+    console.getGController().rightTrigger().onTrue(new ShootHighGoal(shooter, transfer));
+
+    console.getGController().a().onTrue(new DeployClimber(climb, intake));
+    console.getGController().b().onTrue(new RetractClimber(climb, intake));
+
+    console.getGController().x().onTrue(new TurnOnTransfer(transfer));
+    console.getGController().y().onTrue(new TurnOffTransfer(transfer));
+
 
   }
 

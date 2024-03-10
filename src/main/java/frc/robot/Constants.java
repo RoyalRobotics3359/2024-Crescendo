@@ -19,17 +19,16 @@ public final class Constants {
    * its CAN ID number and if the motor is reversed.
    */
   public enum Motors {
-    leftFront(2, false), // FIX ME
-    leftBack(6, false), // FIX ME
-    rightFront(8, true), // FIX ME
-    rightBack(3, true), // FIX ME
-    transferStationTop(1, false), // FIX ME
-    transferStationLeft(8, false), // FIX ME
-    transferStationRight(12, false), // FIX ME
-    torusFlywheelLeft(2, false), // FIX ME
-    torusFlywheelRight(6, false), // FIX ME
-    frontIntakeRoller(10, false), // FIX ME
-    rearIntakeRoller(11, false); // FIX ME
+    leftFront(4, false), 
+    leftBack(3, false), 
+    rightFront(1, true), 
+    rightBack(2, true), 
+    transferStationTop(6, true), 
+    transferStationLeft(5, false), 
+    transferStationRight(9, true), 
+    torusFlywheelLeft(8, false), 
+    torusFlywheelRight(12, true), 
+    IntakeRoller(7, true); 
 
     /** CAN ID of the motor controller */
     private int id;
@@ -66,14 +65,14 @@ public final class Constants {
    * These are the channel numbers assigned to each pneumatic solenoid
    */
   public enum Pneumatics {
-    intakeLeftForward(0),
-    intakeLeftReverse(1),
-    intakeRightForward(2),
-    intakeRightReverse(3),
-    climberLeftUp(4),
-    climberLeftDown(5),
-    climberRightUp(6),
-    climberRightDown(7);
+    intakeLeftForward(12),
+    intakeLeftReverse(13),
+    intakeRightForward(1),
+    intakeRightReverse(2),
+    climberLeftUp(10),
+    climberLeftDown(14),
+    climberRightUp(3),
+    climberRightDown(4);
 
     /**
      * Constructor.  Initializes a new Pneumatics enum entry
@@ -123,10 +122,9 @@ public final class Constants {
 
   /** Robot Subsystem Existence */
 
-  public static final boolean MECANUM_DRIVE_EXISTS = false;
-  public static final boolean TANK_DRIVE_EXISTS = false;
+  public static final boolean MECANUM_DRIVE_EXISTS = true;
   public static final boolean TORUS_FLYWHEEL_EXISTS = true;
-  public static final boolean INTAKE_ROLLERS_EXIST = false;
+  public static final boolean INTAKE_ROLLERS_EXIST = true;
   public static final boolean TRANSFER_STATION_EXIST = false;
   public static final boolean LED_LIGHTS_EXIST = false;
 
@@ -136,7 +134,7 @@ public final class Constants {
 
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
-  public static final double ROLLER_SPEED = 0.25;
+  public static final double ROLLER_SPEED = 0.80;
   public static final double TRANSFER_STATION_SPEED = 0.4;
   public static final double SHOOT_HIGH_GOAL_SPEED = 0.7;
   public static final double SHOOT_LOW_GOAL_SPEED = 0.4;

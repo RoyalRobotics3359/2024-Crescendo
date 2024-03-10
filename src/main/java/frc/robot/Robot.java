@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.SerialPort.Port;
@@ -14,8 +15,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.JoystickDrive;
+import frc.robot.commands.SimpleAuto;
 // import frc.robot.commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
+import frc.robot.subsystems.Climb;
 // import frc.robot.commands.DeployIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MecDrive;
@@ -38,8 +41,10 @@ public class Robot extends TimedRobot {
   private TransferStation transferStation; 
   private OperatorConsole console;
   private Shooter shooter;
+  private Climb climb;
 
   private Compressor compressor;
+  private PneumaticHub ph;
 
 
   /**
@@ -51,6 +56,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
+    ph = new PneumaticHub(13);
+
+    drive = new MecDrive();
+    intake = new Intake(this); 
+    transferStation = new TransferStation();
+    console = new OperatorConsole();
+    shooter = new Shooter();
+    climb = new Climb(this);
+    
+
     // Allows for limelight to be communicated hard wire via USB and computer
     // Information: https://docs.limelightvision.io/docs/docs-limelight/getting-started/best-practices
     for (int port = 5800; port <= 5807; port++) {
@@ -58,18 +73,10 @@ public class Robot extends TimedRobot {
     }
 
 
-    m_robotContainer = new RobotContainer();
-
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
+    m_robotContainer = new RobotContainer(console, drive, intake, shooter, transferStation, climb); // Button configurations assigned in creation
 
-    drive = new MecDrive();
-    intake = new Intake(); 
-    transferStation = new TransferStation();
-    console = new OperatorConsole();
-    shooter = new Shooter();
-
-    compressor = new Compressor(PneumaticsModuleType.REVPH);
-    compressor.enableDigital();
+    ph.enableCompressorDigital();
 
   }
 
@@ -109,6 +116,7 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
+    CommandScheduler.getInstance().schedule(new SimpleAuto(drive));
   }
 
   /** This function is called periodically during autonomous. */
@@ -147,4 +155,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public PneumaticHub getPneumaticHub() { return ph; }
 }

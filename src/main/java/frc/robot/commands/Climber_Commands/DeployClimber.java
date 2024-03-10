@@ -5,11 +5,22 @@
 package frc.robot.commands.Climber_Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Intake;
 
 public class DeployClimber extends Command {
+
+  private Climb climb;
+  private Intake intake;
+
   /** Creates a new DeployClimber. */
-  public DeployClimber() {
+  public DeployClimber(Climb c, Intake i) {
+
+    intake = i;
+    climb = c;
+
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(climb);
   }
 
   // Called when the command is initially scheduled.
@@ -18,7 +29,10 @@ public class DeployClimber extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    intake.extend();
+    climb.deploy();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -27,6 +41,6 @@ public class DeployClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

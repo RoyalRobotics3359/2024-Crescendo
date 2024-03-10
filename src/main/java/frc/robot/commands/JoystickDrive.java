@@ -32,11 +32,14 @@ public class JoystickDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double mag = console.getDController().getLeftStickHyp();
-    double angle = console.getDController().getLeftStickTheta();
-    double turn = console.getDController().getRightStickX();
+    // double mag = console.getDController().getLeftStickHyp();
+    // double angle = console.getDController().getLeftStickTheta();
+    // double turn = console.getDController().getRightStickX();
 
-    mecDrive.setSpeedPID(mag, angle, turn);
+    double speed = console.getDController().getLeftStickY();
+    double turn = console.getDController().getRightStickX();
+    double strafe = console.getDController().getLeftStickX();
+    mecDrive.setSpeedBasic(speed, turn, strafe);
   }
 
   // Called once the command ends or is interrupted.

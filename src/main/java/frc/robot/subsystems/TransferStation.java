@@ -26,8 +26,8 @@ public class TransferStation extends SubsystemBase {
   /** Creates a new TransferStation. */
   public TransferStation() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      left = new CANSparkMax(Constants.Motors.transferStationLeft.getId(), MotorType.kBrushed);
-      right = new CANSparkMax(Constants.Motors.transferStationRight.getId(), MotorType.kBrushed);
+      left = new CANSparkMax(Constants.Motors.transferStationLeft.getId(), MotorType.kBrushless);
+      right = new CANSparkMax(Constants.Motors.transferStationRight.getId(), MotorType.kBrushless);
       top = new CANSparkMax(Constants.Motors.transferStationTop.getId(), MotorType.kBrushed);
 
       left.restoreFactoryDefaults();
@@ -38,9 +38,9 @@ public class TransferStation extends SubsystemBase {
       right.setInverted(Constants.Motors.transferStationRight.isReversed());
       top.setInverted(Constants.Motors.transferStationTop.isReversed());
 
-      left.setIdleMode(IdleMode.kBrake);
-      right.setIdleMode(IdleMode.kBrake);
-      top.setIdleMode(IdleMode.kBrake); 
+      left.setIdleMode(IdleMode.kCoast);
+      right.setIdleMode(IdleMode.kCoast);
+      top.setIdleMode(IdleMode.kCoast); 
 
       limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
     }
@@ -67,7 +67,8 @@ public class TransferStation extends SubsystemBase {
   public void setStage2Power() {
     if (Constants.TRANSFER_STATION_EXIST) {
       left.set(Constants.TRANSFER_STATION_SPEED);
-      right.set(Constants.TRANSFER_STATION_SPEED);
+      right.set(0.0);
+      // right.set(Constants.TRANSFER_STATION_SPEED);
     }
   }
 
