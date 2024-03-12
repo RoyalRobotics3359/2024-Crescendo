@@ -34,7 +34,9 @@ public class MecDrive extends SubsystemBase {
   private CANSparkMax leftBack;
   private CANSparkMax rightFront;
   private CANSparkMax rightBack;
+
   private ADIS16470_IMU gyro;
+  private double gyroAngleInRadians;
 
   private SysIdRoutine routine;
 
@@ -49,6 +51,7 @@ public class MecDrive extends SubsystemBase {
       // Creates new gyroscope used in field oriented drive and autonomous
       gyro = new ADIS16470_IMU();
       gyro.calibrate();
+      gyro.reset(); // <- This resets the gyro so field oriented drive can start at any angle
 
       // Defines all of the motorcontrollers used. Then it resets them to factory deafaults to account
       // for any bugs that may arise. Furthermore, it assigns if it is reversed or not, and it sets up
@@ -73,6 +76,11 @@ public class MecDrive extends SubsystemBase {
       rightFront.setIdleMode(IdleMode.kBrake);
       rightBack.setIdleMode(IdleMode.kBrake);
 
+      leftFront.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
+      leftBack.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
+      rightFront.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
+      rightBack.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
+
       fl_encoder = leftFront.getEncoder();
       bl_encoder = leftBack.getEncoder();
       fr_encoder = rightFront.getEncoder();
@@ -92,40 +100,44 @@ public class MecDrive extends SubsystemBase {
   // ALL mecanum code based on information form this video: https://www.youtube.com/watch?v=gnSW2QpkGXQ
 
   public void setSpeed(double magnitude, double theta, double turn) {
-    double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
-    // double gamma = theta;
-    /**
-     * theta is is the angle of the joystick
-     * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
-     * 
-     * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
-     * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
-     * 
-     */
-
-    double sin = Math.sin(gamma - Math.PI/4);
-    double cos = Math.cos(gamma - Math.PI/4);
-    
-    double max = Math.max(Math.abs(sin), Math.abs(cos));
-
     if (Constants.MECANUM_DRIVE_EXISTS) {
-      leftFront.set(magnitude * cos/max + turn);
-      leftBack.set(magnitude * sin/max + turn);
-      rightFront.set(magnitude * sin/max - turn);
-      rightBack.set(magnitude * cos/max - turn);
+      double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
+      // double gamma = theta;
+      /**
+       * theta is is the angle of the joystick
+       * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
+       * 
+       * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
+       * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
+       * 
+       */
+
+      double sin = Math.sin(gamma - Math.PI/4);
+      double cos = Math.cos(gamma - Math.PI/4);
+      
+      double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+      double leftFrontPower = magnitude * cos/max + turn;
+      double leftBackPower = magnitude * sin/max + turn;
+      double rightFrontPower = magnitude * sin/max - turn;
+      double rightBackPower = magnitude * cos/max - turn;
+
+      /**
+       * This scales down the values of the speeds if any's absolute value exceeds 1
+       */
+
+      if ((magnitude + Math.abs(turn)) > 1) {
+        leftFront.set(leftFrontPower / magnitude + turn);
+        leftBack.set(leftBackPower / magnitude + turn);
+        rightFront.set(rightFrontPower / magnitude + turn);
+        rightBack.set(rightBackPower / magnitude + turn);
+      } else {
+        leftFront.set(leftFrontPower);
+        leftBack.set(leftBackPower);
+        rightFront.set(rightFrontPower);
+        rightBack.set(rightBackPower);
+      }
     }
-
-    /**
-     * This scales down the values of the speeds if any's absolute value exceeds 1
-     */
-
-    if (Constants.MECANUM_DRIVE_EXISTS && (magnitude + Math.abs(turn)) > 1) {
-      leftFront.set(magnitude + turn);
-      leftBack.set(magnitude + turn);
-      rightFront.set(magnitude + turn);
-      rightBack.set(magnitude + turn);
-    }
-
   }
 
   // Sets field-oriented with PID Loop
@@ -242,6 +254,15 @@ public class MecDrive extends SubsystemBase {
     return (12/5767.0) * rpm;
   }
 
+  // Returns gyro angle
+  public double getGyroAngleInRadians() { 
+    return gyroAngleInRadians;
+  }
+
+  // reverses the gyro angle for field oriented upon driver request
+  public void reverseGyroAngleInRadians() {
+    gyroAngleInRadians *= -1;
+  }
 
   
 }

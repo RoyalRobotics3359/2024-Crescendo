@@ -139,14 +139,17 @@ public final class Constants {
   public static final double SHOOT_HIGH_GOAL_SPEED = 0.7;
   public static final double SHOOT_LOW_GOAL_SPEED = 0.4;
 
-  public static final double BANG_BANG_TOLERANCE = 0.5;
+  public static final double BANG_BANG_TOLERANCE = 10.0;
   public static final double INTAKE_DEPLOY_TIME = 2.0;
 
   // Miscilaneous
   
+  public static final int PNEUMATIC_HUB_CANID = 13;
   public static final int TRANSFER_STATION_LIMIT_SWITCH_CHANNEL = 0;
   public static final double ROBOT_TRACK_WIDTH_IN_INCES = 22.25;
   public static final double ROBOT_WIDTH_IN_INCHES = 29.0;
   public static final double ROBOT_LENGTH = 30.3125;
-  
+
+  public static final int DRIVE_MOTOR_CURRENT_LIMIT = 25;
+  public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 25; 
 }

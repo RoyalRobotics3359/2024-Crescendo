@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
 
       roller = new CANSparkMax(Constants.Motors.IntakeRoller.getId(), MotorType.kBrushed);
 
-      roller.restoreFactoryDefaults();
+      // roller.restoreFactoryDefaults();
 
       roller.setInverted(Constants.Motors.IntakeRoller.isReversed());
 

@@ -26,14 +26,16 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     if (Constants.TORUS_FLYWHEEL_EXISTS) {
       flywheelLeft = new CANSparkMax(Constants.Motors.torusFlywheelLeft.getId(), MotorType.kBrushless);
-      flywheelLeft.restoreFactoryDefaults();
+      // flywheelLeft.restoreFactoryDefaults();
       flywheelLeft.setInverted(Constants.Motors.torusFlywheelLeft.isReversed());
       flywheelLeft.setIdleMode(IdleMode.kCoast);
+      flywheelLeft.setSmartCurrentLimit(Constants.SHOOTER_MOTOR_CURRENT_LIMIT);
       
       flywheelRight = new CANSparkMax(Constants.Motors.torusFlywheelRight.getId(), MotorType.kBrushless);
-      flywheelRight.restoreFactoryDefaults();
+      // flywheelRight.restoreFactoryDefaults();
       flywheelRight.setInverted(Constants.Motors.torusFlywheelRight.isReversed());
       flywheelRight.setIdleMode(IdleMode.kCoast);
+      flywheelRight.setSmartCurrentLimit(Constants.SHOOTER_MOTOR_CURRENT_LIMIT);
 
       leftEncoder = flywheelLeft.getEncoder();
       rightEncoder = flywheelLeft.getEncoder();
@@ -46,6 +48,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.getBoolean("Shooter Ready!", isUpToSpeed());
   }
 
   public void setPower(double power) {
@@ -62,10 +65,7 @@ public class Shooter extends SubsystemBase {
     flywheelRight.set(controller.calculate(rightEncoder.getVelocity(), setpoint * 5676));
   }
 
-  public boolean isUpToSpeed(double setpoint) { 
-    double minRPM = setpoint * 5676 * 0.97;
-    double maxRPM = setpoint * 5676 * 1.03;
-    double velocity = (leftEncoder.getVelocity() + rightEncoder.getVelocity())/2;
-    return (velocity >= minRPM && velocity <= maxRPM); 
+  public boolean isUpToSpeed() { 
+    return controller.atSetpoint();
   }
 }

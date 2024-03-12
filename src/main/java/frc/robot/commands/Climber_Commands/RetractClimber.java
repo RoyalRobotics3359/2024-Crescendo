@@ -36,7 +36,7 @@ public class RetractClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (timer.hasElapsed(3.0)) {
+    if (timer.hasElapsed(2.5)) {
       intake.retract();
     }
     climb.retract();
@@ -49,7 +49,7 @@ public class RetractClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(5.0)) {
+    if (timer.hasElapsed(4.0)) {
       return true;
     }
     return false;

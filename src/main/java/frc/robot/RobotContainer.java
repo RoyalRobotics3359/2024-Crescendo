@@ -92,6 +92,8 @@ public class RobotContainer {
     console.getGController().x().onTrue(new TurnOnTransfer(transfer));
     console.getGController().y().onTrue(new TurnOffTransfer(transfer));
 
+    // reverses gyro angle if field oriented sets up wrong
+    // console.getDController().a().toggleOnTrue(drive.runOnce(() -> drive.reverseGyroAngleInRadians()));
 
   }
 

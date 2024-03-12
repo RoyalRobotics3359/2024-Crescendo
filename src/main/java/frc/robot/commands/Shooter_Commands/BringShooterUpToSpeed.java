@@ -45,10 +45,6 @@ public class BringShooterUpToSpeed extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (shootHighGoal) {
-      return shooter.isUpToSpeed(Constants.SHOOT_HIGH_GOAL_SPEED);
-    } else {
-      return shooter.isUpToSpeed(Constants.SHOOT_LOW_GOAL_SPEED);
-    }
+    return shooter.isUpToSpeed();
   }
 }

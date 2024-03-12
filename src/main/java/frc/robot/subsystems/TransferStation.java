@@ -18,7 +18,7 @@ public class TransferStation extends SubsystemBase {
   private CANSparkMax right;
   private CANSparkMax top;
 
-  private DigitalInput limitSwitch;
+  // private DigitalInput limitSwitch;
 
   // STAGE 1 = top 
   // STAGE 2 = left & right
@@ -26,13 +26,13 @@ public class TransferStation extends SubsystemBase {
   /** Creates a new TransferStation. */
   public TransferStation() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      left = new CANSparkMax(Constants.Motors.transferStationLeft.getId(), MotorType.kBrushless);
-      right = new CANSparkMax(Constants.Motors.transferStationRight.getId(), MotorType.kBrushless);
+      left = new CANSparkMax(Constants.Motors.transferStationLeft.getId(), MotorType.kBrushed);
+      right = new CANSparkMax(Constants.Motors.transferStationRight.getId(), MotorType.kBrushed);
       top = new CANSparkMax(Constants.Motors.transferStationTop.getId(), MotorType.kBrushed);
 
-      left.restoreFactoryDefaults();
-      right.restoreFactoryDefaults();
-      top.restoreFactoryDefaults();
+      // left.restoreFactoryDefaults();
+      // right.restoreFactoryDefaults();
+      // top.restoreFactoryDefaults();
 
       left.setInverted(Constants.Motors.transferStationLeft.isReversed());
       right.setInverted(Constants.Motors.transferStationRight.isReversed());
@@ -42,7 +42,7 @@ public class TransferStation extends SubsystemBase {
       right.setIdleMode(IdleMode.kCoast);
       top.setIdleMode(IdleMode.kCoast); 
 
-      limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
+      // limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
     }
   }
 
@@ -79,11 +79,11 @@ public class TransferStation extends SubsystemBase {
     }
   }
 
-  public boolean switchPressed() { 
-    if (Constants.TRANSFER_STATION_EXIST) {
-      return limitSwitch.get();
-    }
-    return false;
-  }
+  // public boolean switchPressed() { 
+  //   if (Constants.TRANSFER_STATION_EXIST) {
+  //     return limitSwitch.get();
+  //   }
+  //   return false;
+  // }
 
 }
