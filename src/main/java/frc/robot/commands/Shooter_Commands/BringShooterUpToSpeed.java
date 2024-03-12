@@ -23,15 +23,17 @@ public class BringShooterUpToSpeed extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Shooter: Bring Up To Speed Scheduled");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (shootHighGoal) {
-      shooter.setVelocityPercentage(Constants.SHOOT_HIGH_GOAL_SPEED);
+      shooter.setPower(Constants.SHOOT_HIGH_GOAL_SPEED);
     } else {
-      shooter.setVelocityPercentage(Constants.SHOOT_LOW_GOAL_SPEED);
+      shooter.setPower(Constants.SHOOT_LOW_GOAL_SPEED);
     }
     
   }
@@ -40,6 +42,7 @@ public class BringShooterUpToSpeed extends Command {
   @Override
   public void end(boolean interrupted) {
     // Leave the shooter running when this command finishes
+    System.out.println("Shooter: Bring Up To Speed  " + (interrupted ? "Interrupted" : "Complete"));
   }
 
   // Returns true when the command should end.

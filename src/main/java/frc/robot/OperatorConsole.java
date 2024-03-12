@@ -15,6 +15,7 @@ public class OperatorConsole {
         /**Fields */
         private XboxController controller;
         private JoystickButton aButton, bButton, xButton, yButton, leftBumper, rightBumper;
+        private Trigger leftTrigger, rightTrigger;
 
         /** Constants */
         private double TRIGGER_DEADBAND = 0.50;

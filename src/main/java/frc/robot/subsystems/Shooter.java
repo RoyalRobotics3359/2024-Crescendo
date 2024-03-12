@@ -40,14 +40,18 @@ public class Shooter extends SubsystemBase {
       leftEncoder = flywheelLeft.getEncoder();
       rightEncoder = flywheelLeft.getEncoder();
 
-      controller = new BangBangController();
-      controller.setTolerance(Constants.BANG_BANG_TOLERANCE);
+      // controller = new BangBangController();
+      // controller.setTolerance(Constants.BANG_BANG_TOLERANCE);
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double leftSpeed = leftEncoder.getVelocity();
+    double rightSpeed = rightEncoder.getVelocity();
+    SmartDashboard.putNumber("Shooter Left RPM", leftSpeed);
+    SmartDashboard.putNumber("Shooter Right RPM", rightSpeed);
     SmartDashboard.getBoolean("Shooter Ready!", isUpToSpeed());
   }
 
@@ -60,12 +64,14 @@ public class Shooter extends SubsystemBase {
    * 
    * @param setpoint - Percentage of max RPM (5676) in range 0.0-1.0
    */
-  public void setVelocityPercentage(double setpoint) {
-    flywheelLeft.set(controller.calculate(leftEncoder.getVelocity(), setpoint * 5676));
-    flywheelRight.set(controller.calculate(rightEncoder.getVelocity(), setpoint * 5676));
-  }
+  // public void setVelocityPercentage(double setpoint) {
+  // flywheelLeft.set(controller.calculate(leftEncoder.getVelocity(), setpoint * 5676));
+  // flywheelRight.set(controller.calculate(rightEncoder.getVelocity(), setpoint * 5676));
 
   public boolean isUpToSpeed() { 
-    return controller.atSetpoint();
+    double leftSpeed = leftEncoder.getVelocity();
+    double rightSpeed = rightEncoder.getVelocity();
+    return (leftSpeed >= 5000 && rightSpeed >= 5000
+    // return controller.atSetpoint();
   }
 }

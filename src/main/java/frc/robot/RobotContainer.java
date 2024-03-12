@@ -16,6 +16,7 @@ import frc.robot.commands.Intake_Commands.IntakeNoteFromFloor;
 import frc.robot.commands.Intake_Commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
 import frc.robot.commands.Shooter_Commands.ShootLowGoal;
+import frc.robot.commands.Shooter_Commands.TurnOffShooter;
 import frc.robot.commands.TransferStation_Commands.TurnOffTransfer;
 import frc.robot.commands.TransferStation_Commands.TurnOnTransfer;
 import frc.robot.subsystems.Climb;
@@ -83,7 +84,7 @@ public class RobotContainer {
     console.getGController().rightBumper().onTrue(new RetractIntake(intake));
     // console.getGController().rightBumper().onTrue(new IntakeNoteFromFloor(intake, transfer));
     
-    console.getGController().leftTrigger().onTrue(new ShootLowGoal(shooter, transfer));
+    console.getGController().leftTrigger().onTrue(new TurnOffShooter(shooter));
     console.getGController().rightTrigger().onTrue(new ShootHighGoal(shooter, transfer));
 
     console.getGController().a().onTrue(new DeployClimber(climb, intake));

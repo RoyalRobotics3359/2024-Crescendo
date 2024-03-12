@@ -199,6 +199,10 @@ public class MecDrive extends SubsystemBase {
       SmartDashboard.putNumber("LB Power", leftBackPower); 
       SmartDashboard.putNumber("RF Power", rightFrontPower);
       SmartDashboard.putNumber("RB Power", rightBackPower);
+      SmartDashboard.putNumber("LF Current", leftFront.getOutputCurrent());
+      SmartDashboard.putNumber("LB Current", leftBack.getOutputCurrent());
+      SmartDashboard.putNumber("RF Current", rightFront.getOutputCurrent());
+      SmartDashboard.putNumber("RB Current", rightBack.getOutputCurrent());
     }
   }
 

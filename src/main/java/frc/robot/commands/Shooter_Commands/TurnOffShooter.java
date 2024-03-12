@@ -25,11 +25,14 @@ public class TurnOffShooter extends Command {
   @Override
   public void execute() {
     shooter.setPower(0);
+    System.out.println("Shooter: Turn Off Scheduled");
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Shooter: Turn Off  " + (interrupted ? "Interrupted" : "Complete"));
+  }
 
   // Returns true when the command should end.
   @Override
