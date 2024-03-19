@@ -6,20 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.MecDrive;
 
-public class SimpleAuto extends Command {
+public class Pause extends Command {
 
-  private MecDrive drive;
   private Timer timer;
+  private double time;
 
-  /** Creates a new SimpleAuto. */
-  public SimpleAuto(MecDrive d) {
+  /** Creates a new Pause. */
+  public Pause(double t) {
 
-    drive = d;
+    time = t;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
@@ -31,21 +29,15 @@ public class SimpleAuto extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    drive.setSpeedBasic(-0.4, 0, 0);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    drive.brake();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(3.2))
-      return true;
-    return false;
+    return timer.hasElapsed(time);
   }
 }

@@ -60,6 +60,17 @@ public class Shooter extends SubsystemBase {
     flywheelRight.set(power);
   }
 
+  /*
+   * Sets the power of to the shooter, giving it some spin for smoother shooting
+   */
+  public void setPowerSpin(double power) {
+    double leftVelocity = leftEncoder.getVelocity();
+    double rightVeolcity = rightEncoder.getVelocity();
+
+    flywheelLeft.set(power);
+    flywheelRight.set(power);
+  }
+
   /**
    * 
    * @param setpoint - Percentage of max RPM (5676) in range 0.0-1.0
@@ -71,7 +82,7 @@ public class Shooter extends SubsystemBase {
   public boolean isUpToSpeed() { 
     double leftSpeed = leftEncoder.getVelocity();
     double rightSpeed = rightEncoder.getVelocity();
-    return (leftSpeed >= 5000 && rightSpeed >= 5000
+    return (leftSpeed >= 5000 && rightSpeed >= 5000);
     // return controller.atSetpoint();
   }
 }

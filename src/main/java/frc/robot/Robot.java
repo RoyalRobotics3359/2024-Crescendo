@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.JoystickDrive;
-import frc.robot.commands.SimpleAuto;
+import frc.robot.commands.Autonomous_Commands.SimpleAuto;
 // import frc.robot.commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
 import frc.robot.subsystems.Climb;
@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
-    // CommandScheduler.getInstance().schedule(new SimpleAuto(drive));
+    CommandScheduler.getInstance().schedule(new SimpleAuto(drive, 3.2));
   }
 
   /** This function is called periodically during autonomous. */

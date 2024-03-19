@@ -23,7 +23,7 @@ public final class Constants {
     leftBack(3, false), 
     rightFront(1, true), 
     rightBack(2, true), 
-    transferStationTop(6, true), 
+    transferStationTop(6, false), 
     transferStationLeft(5, false), 
     transferStationRight(9, true), 
     torusFlywheelLeft(8, false), 
@@ -125,7 +125,7 @@ public final class Constants {
   public static final boolean MECANUM_DRIVE_EXISTS = true;
   public static final boolean TORUS_FLYWHEEL_EXISTS = true;
   public static final boolean INTAKE_ROLLERS_EXIST = true;
-  public static final boolean TRANSFER_STATION_EXIST = false;
+  public static final boolean TRANSFER_STATION_EXIST = true;
   public static final boolean LED_LIGHTS_EXIST = false;
 
   public static final boolean DRIVE_MOTION_CONTROL_EXISTS = false;
@@ -134,7 +134,7 @@ public final class Constants {
 
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
-  public static final double ROLLER_SPEED = 0.80;
+  public static final double ROLLER_SPEED = 1.0;
   public static final double TRANSFER_STATION_SPEED = 0.4;
   public static final double SHOOT_HIGH_GOAL_SPEED = 0.7;
   public static final double SHOOT_LOW_GOAL_SPEED = 0.4;
@@ -150,6 +150,6 @@ public final class Constants {
   public static final double ROBOT_WIDTH_IN_INCHES = 29.0;
   public static final double ROBOT_LENGTH = 30.3125;
 
-  public static final int DRIVE_MOTOR_CURRENT_LIMIT = 25;
+  public static final int DRIVE_MOTOR_CURRENT_LIMIT = 40;
   public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 25; 
 }

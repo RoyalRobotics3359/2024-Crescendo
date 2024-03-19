@@ -4,19 +4,25 @@
 
 package frc.robot.subsystems;
 
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class TransferStation extends SubsystemBase {
 
-  private CANSparkMax left;
-  private CANSparkMax right;
-  private CANSparkMax top;
+  private TalonSRX left;
+  private TalonSRX right;
+  private TalonSRX top;
 
   // private DigitalInput limitSwitch;
 
@@ -26,9 +32,9 @@ public class TransferStation extends SubsystemBase {
   /** Creates a new TransferStation. */
   public TransferStation() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      left = new CANSparkMax(Constants.Motors.transferStationLeft.getId(), MotorType.kBrushed);
-      right = new CANSparkMax(Constants.Motors.transferStationRight.getId(), MotorType.kBrushed);
-      top = new CANSparkMax(Constants.Motors.transferStationTop.getId(), MotorType.kBrushed);
+      left = new TalonSRX(Constants.Motors.transferStationLeft.getId());
+      right = new TalonSRX(Constants.Motors.transferStationRight.getId());
+      top = new TalonSRX(Constants.Motors.transferStationTop.getId());
 
       // left.restoreFactoryDefaults();
       // right.restoreFactoryDefaults();
@@ -38,9 +44,9 @@ public class TransferStation extends SubsystemBase {
       right.setInverted(Constants.Motors.transferStationRight.isReversed());
       top.setInverted(Constants.Motors.transferStationTop.isReversed());
 
-      left.setIdleMode(IdleMode.kCoast);
-      right.setIdleMode(IdleMode.kCoast);
-      top.setIdleMode(IdleMode.kCoast); 
+      left.setNeutralMode(NeutralMode.Brake);
+      right.setNeutralMode(NeutralMode.Brake);
+      top.setNeutralMode(NeutralMode.Brake); 
 
       // limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
     }
@@ -49,33 +55,38 @@ public class TransferStation extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (Constants.TRANSFER_STATION_EXIST) {
+      SmartDashboard.putNumber("Transfer Top Current:", top.getOutputCurrent());
+      SmartDashboard.putNumber("Transfer Left Current:", left.getOutputCurrent());
+      SmartDashboard.putNumber("Transfer Right Current:", right.getOutputCurrent());
+    }
   }
 
   public void setStage1Power() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      top.set(Constants.TRANSFER_STATION_SPEED);
+      top.set(TalonSRXControlMode.PercentOutput, Constants.TRANSFER_STATION_SPEED);
     }
   }
 
   public void brakeStage1() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      top.set(0);
+      top.set(TalonSRXControlMode.PercentOutput, 0);
     }
   }
 
   // Accepts values between -1 (inclusive) and 1 (inclusive)
   public void setStage2Power() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      left.set(Constants.TRANSFER_STATION_SPEED);
-      right.set(0.0);
+      left.set(TalonSRXControlMode.PercentOutput, Constants.TRANSFER_STATION_SPEED);
+      right.set(TalonSRXControlMode.PercentOutput, Constants.TRANSFER_STATION_SPEED);
       // right.set(Constants.TRANSFER_STATION_SPEED);
     }
   }
 
   public void brakeStage2() {
     if (Constants.TRANSFER_STATION_EXIST) {
-      left.set(0);
-      right.set(0);
+      left.set(TalonSRXControlMode.PercentOutput, 0);
+      right.set(TalonSRXControlMode.PercentOutput, 0);
     }
   }
 

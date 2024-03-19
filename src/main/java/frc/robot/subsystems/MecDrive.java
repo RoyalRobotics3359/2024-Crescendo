@@ -50,8 +50,9 @@ public class MecDrive extends SubsystemBase {
     if (Constants.MECANUM_DRIVE_EXISTS) {
       // Creates new gyroscope used in field oriented drive and autonomous
       gyro = new ADIS16470_IMU();
-      gyro.calibrate();
+      // gyro.calibrate();
       gyro.reset(); // <- This resets the gyro so field oriented drive can start at any angle
+      gyro.calibrate();
 
       // Defines all of the motorcontrollers used. Then it resets them to factory deafaults to account
       // for any bugs that may arise. Furthermore, it assigns if it is reversed or not, and it sets up
@@ -81,10 +82,10 @@ public class MecDrive extends SubsystemBase {
       rightFront.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
       rightBack.setSmartCurrentLimit(Constants.DRIVE_MOTOR_CURRENT_LIMIT);
 
-      fl_encoder = leftFront.getEncoder();
-      bl_encoder = leftBack.getEncoder();
-      fr_encoder = rightFront.getEncoder();
-      br_encoder = rightBack.getEncoder();
+      // fl_encoder = leftFront.getEncoder();
+      // bl_encoder = leftBack.getEncoder();
+      // fr_encoder = rightFront.getEncoder();
+      // br_encoder = rightBack.getEncoder();
       
       // Defines PID Controller
       controller = new PIDController(0, 0, 0);
@@ -214,40 +215,7 @@ public class MecDrive extends SubsystemBase {
       rightBack.set(0);
     }
   }
-
-  public void setSpeedVoltage(double magnitude, double theta, double turn) {
-    if (Constants.MECANUM_DRIVE_EXISTS) {
-      double gamma = theta - Math.toRadians(gyro.getAngle(ADIS16470_IMU.IMUAxis.kYaw)); // <- This enables field-centric drive
-      // double gamma = theta;
-      /**
-       * theta is is the angle of the joystick
-       * magnitude is equivalent to the hypotnuse created by the x and y vector of the joystick
-       * 
-       * Front-left and back-right wheel speed: sin(theta - pi/4) * magnitude + turn
-       * Front-right and back-left wheel speed: sin(theta + pi/4) * magnitude + turn
-       * 
-       */
-
-      double sin = Math.sin(gamma - Math.PI/4);
-      double cos = Math.cos(gamma - Math.PI/4);
-      
-      double max = Math.max(Math.abs(sin), Math.abs(cos));
-
-      leftFront.set(magnitude * cos/max + turn);
-      leftBack.set(magnitude * sin/max + turn);
-      rightFront.set(magnitude * sin/max - turn);
-      rightBack.set(magnitude * cos/max - turn);
-
-      if (magnitude + Math.abs(turn) > 1) {
-        leftFront.setVoltage((magnitude + turn) * 12.0);
-        leftBack.setVoltage((magnitude + turn) * 12.0);
-        rightFront.setVoltage((magnitude + turn) * 12.0);
-        rightBack.setVoltage((magnitude + turn) * 12.0);
-      }      
-
-    }
-  }
-
+  
   // Converts the velocity from the encoder to the velocity with the gear ratio
   private double getGearedVelocity(double encoderVelocity) {
     return ((encoderVelocity / 5676) * 5.8125) / 10.71;

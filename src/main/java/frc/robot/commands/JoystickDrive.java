@@ -37,7 +37,7 @@ public class JoystickDrive extends Command {
     // double turn = console.getDController().getRightStickX();
 
     double speed = console.getDController().getLeftStickY();
-    double turn = console.getDController().getRightStickX();
+    double turn = console.getDController().getRightStickX() * 0.75;
     double strafe = console.getDController().getLeftStickX();
     mecDrive.setSpeedBasic(speed, turn, strafe);
     // mecDrive.setSpeed(mag, angle, turn);

@@ -31,8 +31,8 @@ public class ShootLowGoal extends SequentialCommandGroup {
     transfer = t;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new ParallelCommandGroup(new BringShooterUpToSpeed(shooter, false), new TransferNote(transfer)),
+    addCommands( 
+    new ParallelCommandGroup(new BringShooterUpToSpeed(shooter, false), new TransferNote(transfer)),
       new TurnOffShooter(shooter)
       );
   }
