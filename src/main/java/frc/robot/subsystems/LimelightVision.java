@@ -9,6 +9,9 @@
 
 package frc.robot.subsystems;
 
+import java.nio.file.attribute.PosixFilePermission;
+
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -34,6 +37,8 @@ public class LimelightVision extends SubsystemBase {
 
   private double angleToGoalInDegrees;
   private double angleToGoalRadians;
+
+  private PoseEstimator pose;
 
   /** Creates a new LimelightVision. */
   public LimelightVision() {
@@ -72,6 +77,11 @@ public class LimelightVision extends SubsystemBase {
 
   public double getDistanceFromGoal() { return 0.0; }
 
+  // Code for pose from apriltag taken from:
+  // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization
 
+  public void updatePose() {
+    PoseLatency visionPose = table.getPoseLatency();
+  }
   
 }
