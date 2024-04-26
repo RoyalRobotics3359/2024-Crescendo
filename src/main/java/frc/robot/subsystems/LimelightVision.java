@@ -81,7 +81,7 @@ public class LimelightVision extends SubsystemBase {
   // https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-robot-localization
 
   public void updatePose() {
-    PoseLatency visionPose = table.getPoseLatency();
+    //PoseLatency visionPose = table.getPoseLatency();
   }
   
 }
