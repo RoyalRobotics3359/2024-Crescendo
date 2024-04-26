@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.JoystickDrive;
+import frc.robot.commands.Autonomous_Commands.HighGoalAuto;
 import frc.robot.commands.Autonomous_Commands.SimpleAuto;
 // import frc.robot.commands.RetractIntake;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
@@ -44,7 +45,7 @@ public class Robot extends TimedRobot {
   private Shooter shooter;
   private Climb climb;
 
-  // private DriverCamera camera;
+  private DriverCamera camera;
   private PneumaticHub ph;
 
 
@@ -67,7 +68,7 @@ public class Robot extends TimedRobot {
     shooter = new Shooter();
     climb = new Climb(this);
 
-    // camera = new DriverCamera();
+    camera = new DriverCamera();
     
 
     // Allows for limelight to be communicated hard wire via USB and computer
@@ -80,6 +81,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(drive, new JoystickDrive(drive, console));
     m_robotContainer = new RobotContainer(console, drive, intake, shooter, transferStation, climb); // Button configurations assigned in creation
 
+    resetSubsystems();
+  }
+
+  private void resetSubsystems() {
+    transferStation.brakeStage1();
+    transferStation.brakeStage2();
+    shooter.setPower(0.0);
+    climb.retract();
   }
 
   /**
@@ -119,7 +128,9 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
-    CommandScheduler.getInstance().schedule(new SimpleAuto(drive, 3.2));
+    resetSubsystems();
+    CommandScheduler.getInstance().schedule(new SimpleAuto(drive, 3.4,-0.4,0,0));
+    // CommandScheduler.getInstance().schedule(new HighGoalAuto(drive, transferStation, shooter, intake));
   }
 
   /** This function is called periodically during autonomous. */
@@ -135,6 +146,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    resetSubsystems();
   }
 
   /** This function is called periodically during operator control. */

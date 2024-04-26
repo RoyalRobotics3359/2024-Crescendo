@@ -11,8 +11,7 @@ import frc.robot.subsystems.TransferStation;
 public class TransferNote extends Command {
 
   private TransferStation transfer;
-  private Timer timer;
-
+  
   /** Creates a new TransferNote. */
   public TransferNote(TransferStation t) {
 
@@ -25,8 +24,6 @@ public class TransferNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer = new Timer();
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,13 +38,14 @@ public class TransferNote extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    transfer.brakeStage1();
-    transfer.brakeStage2();
+    // transfer.brakeStage1();
+    // transfer.brakeStage2();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(5.0);
+    // return transfer.isSwitchPressed();
+    return true;
   }
 }

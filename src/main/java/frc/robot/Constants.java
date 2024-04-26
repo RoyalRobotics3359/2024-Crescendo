@@ -135,7 +135,7 @@ public final class Constants {
   public static final double MAX_VOLTAGE = 10;
   public static final double MAX_MEC_SPEED = 1.0;
   public static final double ROLLER_SPEED = 1.0;
-  public static final double TRANSFER_STATION_SPEED = 0.4;
+  public static final double TRANSFER_STATION_SPEED = 0.5;
   public static final double SHOOT_HIGH_GOAL_SPEED = 1.0;
   public static final double SHOOT_LOW_GOAL_SPEED = 0.4;
 

@@ -6,7 +6,9 @@ package frc.robot.commands.Shooter_Commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Intake_Commands.DeployIntake;
 import frc.robot.commands.TransferStation_Commands.TransferNote;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TransferStation;
 
@@ -23,17 +25,20 @@ public class ShootHighGoal extends SequentialCommandGroup {
 
   private Shooter shooter;
   private TransferStation transfer;
+  private Intake intake;
 
   /** Creates a new ShootHighGoal. */
-  public ShootHighGoal(Shooter s, TransferStation t) {
+  public ShootHighGoal(Shooter s, TransferStation t, Intake i) {
 
     shooter = s;
     transfer = t;
+    intake = i;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(new BringShooterUpToSpeed(shooter, true), new TransferNote(transfer)),
-      new TurnOffShooter(shooter)
-      );
+      new BringShooterUpToSpeed(shooter, true), 
+      new DeployIntake(intake), 
+      new TransferNote(transfer)
+    );
   }
 }

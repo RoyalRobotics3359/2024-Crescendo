@@ -24,7 +24,7 @@ public class TransferStation extends SubsystemBase {
   private TalonSRX right;
   private TalonSRX top;
 
-  // private DigitalInput limitSwitch;
+  private DigitalInput limitSwitch;
 
   // STAGE 1 = top 
   // STAGE 2 = left & right
@@ -48,7 +48,7 @@ public class TransferStation extends SubsystemBase {
       right.setNeutralMode(NeutralMode.Brake);
       top.setNeutralMode(NeutralMode.Brake); 
 
-      // limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
+      limitSwitch = new DigitalInput(Constants.TRANSFER_STATION_LIMIT_SWITCH_CHANNEL);
     }
   }
 
@@ -59,12 +59,19 @@ public class TransferStation extends SubsystemBase {
       SmartDashboard.putNumber("Transfer Top Current:", top.getOutputCurrent());
       SmartDashboard.putNumber("Transfer Left Current:", left.getOutputCurrent());
       SmartDashboard.putNumber("Transfer Right Current:", right.getOutputCurrent());
+      SmartDashboard.putBoolean("Limit Switch", isSwitchPressed());
     }
   }
 
   public void setStage1Power() {
     if (Constants.TRANSFER_STATION_EXIST) {
       top.set(TalonSRXControlMode.PercentOutput, Constants.TRANSFER_STATION_SPEED);
+    }
+  }
+
+  public void setStage1Power(boolean isReversed) {
+    if (Constants.TRANSFER_STATION_EXIST && isReversed) {
+      top.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.TRANSFER_STATION_SPEED);
     }
   }
 
@@ -83,6 +90,13 @@ public class TransferStation extends SubsystemBase {
     }
   }
 
+  public void setStage2Power(boolean isReversed) {
+    if (Constants.TRANSFER_STATION_EXIST && isReversed) {
+      left.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.TRANSFER_STATION_SPEED);
+      right.set(TalonSRXControlMode.PercentOutput, -1.0 * Constants.TRANSFER_STATION_SPEED);
+    }
+  }
+
   public void brakeStage2() {
     if (Constants.TRANSFER_STATION_EXIST) {
       left.set(TalonSRXControlMode.PercentOutput, 0);
@@ -90,11 +104,11 @@ public class TransferStation extends SubsystemBase {
     }
   }
 
-  // public boolean switchPressed() { 
-  //   if (Constants.TRANSFER_STATION_EXIST) {
-  //     return limitSwitch.get();
-  //   }
-  //   return false;
-  // }
+  public boolean isSwitchPressed() { 
+    if (Constants.TRANSFER_STATION_EXIST) {
+      return !limitSwitch.get();
+    }
+    return false;
+  }
 
 }

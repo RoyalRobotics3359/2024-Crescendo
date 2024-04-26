@@ -5,37 +5,26 @@
 package frc.robot.commands.Intake_Commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.TransferStation_Commands.TransferNote;
+import frc.robot.commands.TransferStation_Commands.ReverseTransfer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferStation;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class OutakeNote extends ParallelCommandGroup {
 
-/**
- * - Deploy intake
- * - Turn on Transfer Station  <== runs until limit switch detects note
- * - Retract Intake
- *
- */
-public class IntakeNoteFromFloor extends ParallelCommandGroup {
+  private Intake intake;
+  private TransferStation transfer;
 
-    private Intake intake;
+  /** Creates a new OutakeNote. */
+  public OutakeNote(Intake i, TransferStation t) {
 
-    private TransferStation transfer;
-
-  /** Creates a new IntakeNoteFromFloor. */
-  public IntakeNoteFromFloor(Intake in, TransferStation t) {
-    intake = in;
+    intake = i;
     transfer = t;
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new DeployIntake(intake),
-      new TransferNote(transfer)
-      );
+    addCommands(new ReverseRollers(intake), new ReverseTransfer(transfer));
   }
-
 }

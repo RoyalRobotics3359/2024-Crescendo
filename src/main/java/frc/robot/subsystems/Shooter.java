@@ -82,7 +82,6 @@ public class Shooter extends SubsystemBase {
   public boolean isUpToSpeed() { 
     double leftSpeed = leftEncoder.getVelocity();
     double rightSpeed = rightEncoder.getVelocity();
-    return (leftSpeed >= 5000 && rightSpeed >= 5000);
-    // return controller.atSetpoint();
+    return (leftSpeed >= 5500 && rightSpeed >= 5500);
   }
 }

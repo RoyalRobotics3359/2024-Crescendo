@@ -13,11 +13,17 @@ import frc.robot.commands.Climber_Commands.DeployClimber;
 import frc.robot.commands.Climber_Commands.RetractClimber;
 import frc.robot.commands.Intake_Commands.DeployIntake;
 import frc.robot.commands.Intake_Commands.IntakeNoteFromFloor;
+import frc.robot.commands.Intake_Commands.LoadHumanNote;
+import frc.robot.commands.Intake_Commands.OutakeNote;
 import frc.robot.commands.Intake_Commands.RetractIntake;
+import frc.robot.commands.Intake_Commands.ReverseRollers;
+import frc.robot.commands.Intake_Commands.turnOnRoller;
 import frc.robot.commands.Shooter_Commands.BringShooterUpToSpeed;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
 import frc.robot.commands.Shooter_Commands.ShootLowGoal;
+import frc.robot.commands.Shooter_Commands.StopShooting;
 import frc.robot.commands.Shooter_Commands.TurnOffShooter;
+import frc.robot.commands.TransferStation_Commands.ReverseTransfer;
 import frc.robot.commands.TransferStation_Commands.TurnOffTransfer;
 import frc.robot.commands.TransferStation_Commands.TurnOnTransfer;
 import frc.robot.subsystems.Climb;
@@ -86,7 +92,8 @@ public class RobotContainer {
     // console.getGController().rightBumper().onTrue(new IntakeNoteFromFloor(intake, transfer));
     
     console.getGController().leftTrigger().onTrue(new TurnOffShooter(shooter));
-    console.getGController().rightTrigger().onTrue(new BringShooterUpToSpeed(shooter, true));
+    console.getGController().rightTrigger().toggleOnTrue(new ShootHighGoal(shooter, transfer, intake));
+    console.getGController().rightTrigger().toggleOnFalse(new StopShooting(shooter, transfer, intake));
 
     console.getGController().a().onTrue(new DeployClimber(climb, intake));
     console.getGController().b().onTrue(new RetractClimber(climb, intake));
@@ -94,8 +101,12 @@ public class RobotContainer {
     console.getGController().x().onTrue(new TurnOnTransfer(transfer));
     console.getGController().y().onTrue(new TurnOffTransfer(transfer));
 
-    // reverses gyro angle if field oriented sets up wrong
-    // console.getDController().a().toggleOnTrue(drive.runOnce(() -> drive.reverseGyroAngleInRadians()));
+    console.getGController().dPadUp().onTrue(new ReverseRollers(intake));
+    console.getGController().dPadDown().onTrue(new turnOnRoller(intake));
+    // console.getGController().dPadDown().onTrue(new ReverseTransfer(transfer));
+    
+    console.getGController().leftStickButton().whileTrue(new LoadHumanNote(intake));
+    console.getGController().rightStickButton().onTrue(new OutakeNote(intake, transfer));
 
   }
 

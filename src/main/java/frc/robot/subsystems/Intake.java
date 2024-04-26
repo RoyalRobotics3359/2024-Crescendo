@@ -104,4 +104,11 @@ public class Intake extends SubsystemBase {
       roller.set(TalonSRXControlMode.PercentOutput, 0.0);
     }
   }
+
+  public void reverseRoller() {
+    if (Constants.INTAKE_ROLLERS_EXIST) {
+      roller.set(TalonSRXControlMode.PercentOutput, 1.0 * Constants.ROLLER_SPEED);
+    }
+  }
+
 }

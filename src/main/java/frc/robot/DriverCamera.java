@@ -25,6 +25,8 @@ public class DriverCamera {
 
                     camera.setResolution(640, 480);
 
+                    camera.setFPS(10);
+
                     source = CameraServer.putVideo("Driver Camera", 640, 480);
                 }
             );

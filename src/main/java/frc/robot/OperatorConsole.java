@@ -14,8 +14,7 @@ public class OperatorConsole {
     public class Controller {
         /**Fields */
         private XboxController controller;
-        private JoystickButton aButton, bButton, xButton, yButton, leftBumper, rightBumper;
-        private Trigger leftTrigger, rightTrigger;
+        private JoystickButton aButton, bButton, xButton, yButton, leftBumper, rightBumper, back, start, leftStickButton, rightStickButton;
 
         /** Constants */
         private double TRIGGER_DEADBAND = 0.50;
@@ -32,6 +31,12 @@ public class OperatorConsole {
 
             leftBumper = new JoystickButton(controller, XboxController.Button.kLeftBumper.value);
             rightBumper = new JoystickButton(controller, XboxController.Button.kRightBumper.value);
+
+            back = new JoystickButton(controller, XboxController.Button.kBack.value);
+            start = new JoystickButton(controller, XboxController.Button.kStart.value);
+
+            leftStickButton = new JoystickButton(controller, XboxController.Button.kLeftStick.value);
+            rightStickButton = new JoystickButton(controller, XboxController.Button.kRightStick.value);
         }
 
         // Buttons that return the state of each button on xbox controller
@@ -43,6 +48,11 @@ public class OperatorConsole {
         public JoystickButton leftBumper() { return leftBumper; }
         public JoystickButton rightBumper() { return rightBumper; }
 
+        public JoystickButton back() { return back; }
+        public JoystickButton start() { return start; }
+
+        public JoystickButton leftStickButton() { return leftStickButton; }
+        public JoystickButton rightStickButton() { return rightStickButton; }
 
         // Uses a lambda function to return boolean value if trigger has been pressed
         public Trigger leftTrigger() {
@@ -51,6 +61,24 @@ public class OperatorConsole {
 
         public Trigger rightTrigger() {
             return new Trigger(() -> (controller.getRawAxis(XboxController.Axis.kRightTrigger.value) >= TRIGGER_DEADBAND));
+        }
+
+        // Trigger bindings for dpad
+
+        public Trigger dPadUp() {
+            return new Trigger(() -> (controller.getPOV() == 0));
+        }
+
+        public Trigger dPadDown() {
+            return new Trigger(() -> (controller.getPOV() == 180));
+        }
+
+        public Trigger dPadRight() {
+            return new Trigger(() -> (controller.getPOV() == 90));
+        }
+
+        public Trigger dPadLeft() {
+            return new Trigger(() -> (controller.getPOV() == 270));
         }
 
         // For all controll sticks on controller, they have a range set - deadband >= control stick >= deadband

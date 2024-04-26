@@ -11,6 +11,7 @@ import frc.robot.commands.Pause;
 import frc.robot.commands.Intake_Commands.DeployIntake;
 import frc.robot.commands.Shooter_Commands.BringShooterUpToSpeed;
 import frc.robot.commands.Shooter_Commands.ShootHighGoal;
+import frc.robot.commands.Shooter_Commands.StopShooting;
 import frc.robot.commands.Shooter_Commands.TurnOffShooter;
 import frc.robot.commands.TransferStation_Commands.TurnOffTransfer;
 import frc.robot.commands.TransferStation_Commands.TurnOnTransfer;
@@ -40,14 +41,15 @@ public class HighGoalAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new BringShooterUpToSpeed(shooter, true), // Turn on shooter
-      new SimpleAuto(drive, 1.0),           // Drive backwards and turn towards speaker
-      new TurnOnTransfer(transfer),           // Move note into shooter
-      new Pause(2.0),                         // Wait until note shoots
-      new TurnOffShooter(shooter),
-      new TurnOffTransfer(transfer),
-      new DeployIntake(intake),
-      new SimpleAuto(drive, 1.0)              // Drive backwards accross the line
+      //new BringShooterUpToSpeed(shooter, true), // Turn on shooter
+      //new SimpleAuto(drive, 1.0, -0.4, 0, 0),           // Drive backwards and turn towards speaker
+      //new TurnOnTransfer(transfer),           // Move note into shooter
+      new ShootHighGoal(shooter, transfer, intake),
+      new Pause(5.0),                         // Wait until note shoots
+      new StopShooting(shooter, transfer, intake),
+      new SimpleAuto(drive, 1.0, -0.4, 0, 0),
+      new SimpleAuto(drive, 1.0, -0.4, 0.15, 0),
+      new SimpleAuto(drive, 2.0, -0.4, 0, 0)             // Drive backwards accross the line
       );
   }
 }
